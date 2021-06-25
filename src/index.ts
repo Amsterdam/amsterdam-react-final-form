@@ -23,6 +23,9 @@ import ComposedField from "./components/unbound/ComposedField"
 import DebugFormState from "./components/final-form/DebugForm/DebugFormState"
 import DebugFormValues from "./components/final-form/DebugForm/DebugFormValues"
 
+// Grid:
+import { FormPositioner } from "./grid/FormPositioner"
+
 // Unbound (not bound to react-final-form)
 import Alert from "./components/unbound/Alert"
 import UnboundBooleanField from "./components/unbound/UnboundBooleanField"
@@ -66,6 +69,8 @@ export {
   TelField,
   TextAreaField,
   TextField,
+
+  FormPositioner,
 
   Scaffold,
   ScaffoldField,
