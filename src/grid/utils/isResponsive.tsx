@@ -1,5 +1,5 @@
-import { OnlyResponsive } from "@amsterdam/amsterdam-react-final-form/components/layout/responsiveProps"
-import { Dimensions, BreakPoint } from "@amsterdam/amsterdam-react-final-form"
+import { OnlyResponsive, BreakPoint } from "../../components/layout/responsiveProps"
+import { Dimensions } from "../../components/layout/FormGridCell"
 
 const validKeys:BreakPoint[] = [
   "mobileS",
