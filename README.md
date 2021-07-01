@@ -6,9 +6,9 @@ Based on OpenApi specs.
 ## Demo
 
 Please have a look at our storybook! 
-- [Simple example](https://jeffrey-zutt.github.io/amsterdam-react-final-form/?path=/story/complete-form--example)
-- [Complex data structure example](https://jeffrey-zutt.github.io/amsterdam-react-final-form/?path=/story/complete-form--example-using-complex-fields)
-- [Responsive scaffolded grid](https://jeffrey-zutt.github.io/amsterdam-react-final-form/?path=/story/scaffold--complex-grid)
+- [Simple example](https://amsterdam.github.io/amsterdam-react-final-form/?path=/story/complete-form--example)
+- [Complex data structure example](https://amsterdam.github.io/amsterdam-react-final-form/?path=/story/complete-form--example-using-complex-fields)
+- [Responsive scaffolded grid](https://amsterdam.github.io/amsterdam-react-final-form/?path=/story/scaffold--complex-grid)
 
 ## Goals
 
@@ -177,9 +177,6 @@ const MyForm:React.FC = () => {
 ## Implement custom form-components to be used in scaffolding.
 
 TODO document.
-
-## Generate scaffolds based on OpenAPI3
-[Have a look at this repository](https://github.com/Jeffrey-Zutt/amsterdam-open-zaak-scaffold-form)
 
 ## Install
 
