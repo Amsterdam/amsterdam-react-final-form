@@ -4,6 +4,7 @@ import BooleanField from "./components/final-form/BooleanField/BooleanField"
 import CheckboxFields from "./components/final-form/CheckboxFields/CheckboxFields"
 import ComplexCheckboxFields from "./components/final-form/CheckboxFields/ComplexCheckboxFields"
 import DateField from "./components/final-form/DateField/DateField"
+import EmailField from "./components/final-form/EmailField/EmailField"
 import NumberField from "./components/final-form/NumberField/NumberField"
 import RadioFields from "./components/final-form/RadioFields/RadioFields"
 import ComplexRadioFields from "./components/final-form/RadioFields/ComplexRadioFields"
@@ -62,6 +63,7 @@ export {
   CheckboxFields,
   ComplexCheckboxFields,
   DateField,
+  EmailField,
   NumberField,
   RadioFields,
   ComplexRadioFields,
