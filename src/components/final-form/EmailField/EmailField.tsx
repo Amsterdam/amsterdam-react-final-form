@@ -6,6 +6,7 @@ import { isRequired as isRequiredValidator } from "../../../validators/isRequire
 import UnboundTextField, { Props as UnboundTextFieldProps } from "../../unbound/UnboundTextField"
 import { Responsive } from "../../layout/responsiveProps"
 import { Dimensions } from "../../layout/FormGridCell"
+import { isValidEmail } from "../../../validators/isValidEmail"
 
 export type Props = {
   position?: Responsive<Dimensions>
@@ -26,6 +27,7 @@ const EmailField:React.FC<Props> = ({ name, label, validate, isRequired, ...othe
     type: "email",
     validate: composeValidation([
       isRequired && isRequiredValidator(),
+      isValidEmail(),
       validate
     ])
   })
