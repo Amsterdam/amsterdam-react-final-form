@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "@amsterdam/asc-assets": "^0.31.0",
-    "@amsterdam/asc-ui": "^0.30.0",
+    "@amsterdam/asc-ui": "^0.31.0",
     "@storybook/addon-actions": "^6.1.11",
     "@storybook/addon-docs": "^6.1.11",
     "@storybook/addon-links": "^6.1.11",
