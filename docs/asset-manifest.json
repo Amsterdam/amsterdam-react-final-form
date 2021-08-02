@@ -1,7 +1,7 @@
 {
   "files": {
     "0.cbebac96.iframe.bundle.js": "./0.cbebac96.iframe.bundle.js",
-    "main.js": "./main.6f7571f5.iframe.bundle.js",
+    "main.js": "./main.3d04ae1c.iframe.bundle.js",
     "runtime~main.js": "./runtime~main.accf34eb.iframe.bundle.js",
     "vendors~main.js": "./vendors~main.afb573bd.iframe.bundle.js",
     "vendors~main.js.map": "./vendors~main.afb573bd.iframe.bundle.js.map",
@@ -19,6 +19,6 @@
   "entrypoints": [
     "runtime~main.accf34eb.iframe.bundle.js",
     "vendors~main.afb573bd.iframe.bundle.js",
-    "main.6f7571f5.iframe.bundle.js"
+    "main.3d04ae1c.iframe.bundle.js"
   ]
 }
