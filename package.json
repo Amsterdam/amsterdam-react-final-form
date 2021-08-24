@@ -48,7 +48,7 @@
     "lodash.isequal": "^4.5.0"
   },
   "devDependencies": {
-    "@amsterdam/asc-assets": "^0.31.0",
+    "@amsterdam/asc-assets": "^0.32.0",
     "@amsterdam/asc-ui": "^0.32.1",
     "@storybook/addon-actions": "^6.1.11",
     "@storybook/addon-docs": "^6.1.11",
