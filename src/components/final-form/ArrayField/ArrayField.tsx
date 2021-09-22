@@ -69,6 +69,7 @@ const ArrayField:React.FC<Props> = ({ label, columns, hint, position, align, nam
           variant='tertiary'
           icon={<Enlarge />}
           onClick={(e:React.MouseEvent) => { e.preventDefault(); push(name, undefined) } }
+          id={`button-add-${ name }`}
         />
       </AddButtonWrap>
     ) }
