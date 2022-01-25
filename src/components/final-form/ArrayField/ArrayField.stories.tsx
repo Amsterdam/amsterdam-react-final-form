@@ -1,13 +1,13 @@
-import React from "react"
-import { themeColor, themeSpacing } from "@amsterdam/asc-ui"
-import styled from "styled-components"
+import { ComponentProps } from "react"
+import { Story, Meta } from "@storybook/react"
 
 import ArrayField from "./ArrayField"
 import { ScaffoldFields } from "../Scaffold/Scaffold"
 
 export default {
-  title: "ArrayField"
-}
+  title: "ArrayField",
+  component: ArrayField
+} as Meta
 
 const fields:ScaffoldFields = {
   description: {
@@ -35,60 +35,39 @@ const fields:ScaffoldFields = {
   }
 }
 
-const Pre = styled.pre`
-  background-color: ${ themeColor("tint", "level2") };
-  padding: ${ themeSpacing(3) };
-`
+const StoryComponent: Story<ComponentProps<typeof ArrayField>> = (args) => <ArrayField {...args} />
 
-export const Array = () =>
-<>
-  <Pre>\/\/ Voorbeeld van het scaffoldFields object </Pre>
-  <Pre>{ JSON.stringify(fields, null, 2) }</Pre>
-  <ArrayField
-    columns='1fr 1fr 1fr auto'
-    name='myArray'
-    allowAdd={true}
-    allowRemove={true}
-    scaffoldFields={fields}
-  />
-</>
+export const Array = StoryComponent.bind({})
+Array.args = {
+  columns: "1fr 1fr 1fr auto",
+  name: "myArray",
+  allowAdd: true,
+  allowRemove: true,
+  scaffoldFields: fields
+}
 
-export const WithMinItems = () =>
-  <ArrayField
-    columns='1fr 1fr 1fr auto'
-    name='myArray'
-    allowAdd={true}
-    allowRemove={true}
-    scaffoldFields={fields}
-    minItems={3}
-  />
+export const WithMinItems = StoryComponent.bind({})
+WithMinItems.args = {
+  ...Array.args,
+  minItems: 3
+}
 
-  export const WithMaxItems = () =>
-    <ArrayField
-      columns='1fr 1fr 1fr auto'
-      label='Max 3 items'
-      name='myArray'
-      allowAdd={true}
-      allowRemove={true}
-      scaffoldFields={fields}
-      maxItems={3}
-    />
+export const WithMaxItems = StoryComponent.bind({})
+WithMaxItems.args = {
+  ...Array.args,
+  label: "Max 3 items",
+  maxItems: 3
+}
 
-export const WithLabel = () => <ArrayField
-  columns='1fr 1fr 1fr auto'
-  label='My label'
-  name='myArray'
-  allowAdd={true}
-  allowRemove={true}
-  scaffoldFields={fields}
-/>
+export const WithLabel = StoryComponent.bind({})
+WithLabel.args = {
+  ...Array.args,
+  label: "My label"
+}
 
-export const WithHint = () => <ArrayField
-  columns='1fr 1fr 1fr auto'
-  label='My label'
-  hint='Maecenas faucibus mollis interdum.'
-  name='myArray'
-  allowAdd={true}
-  allowRemove={true}
-  scaffoldFields={fields}
-/>
+export const WithHint = StoryComponent.bind({})
+WithHint.args = {
+  ...Array.args,
+  label: "My label",
+  hint: "Maecenas faucibus mollis interdum."
+}

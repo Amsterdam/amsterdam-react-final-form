@@ -1,9 +1,10 @@
-import React from "react"
+import { Meta } from "@storybook/react"
 import ComplexSelectField from "./ComplexSelectField"
 
 export default {
-  title: "SelectField/Complex data structure"
-}
+  title: "SelectField/Complex data structure",
+  component: ComplexSelectField
+} as Meta
 
 type MyComplexDataStructure = {
   myLabel: string
