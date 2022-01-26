@@ -133,10 +133,16 @@ const ScaffoldField:React.FC<Props> = ({ field }) => {
       return <ArrayField {...field.props} />
     case "Boolean":
       return <BooleanField {...field.props} />
+    case "Button":
+      return <Button {...field.props} />
     case "CheckboxFields":
       return <CheckboxFields {...field.props} />
     case "ComplexCheckboxFields":
       return <ComplexCheckboxFields {...field.props} />
+    case "ComplexRadioFields":
+      return <ComplexRadioFields {...field.props} />
+    case "ComplexSelectField":
+      return <ComplexSelectField {...field.props} />
     case "DateField":
       return <DateField {...field.props} />
     case "EmailField":
@@ -145,22 +151,16 @@ const ScaffoldField:React.FC<Props> = ({ field }) => {
       return <NumberField {...field.props} />
     case "RadioFields":
       return <RadioFields {...field.props} />
-    case "ComplexRadioFields":
-      return <ComplexRadioFields {...field.props} />
-    case "SelectField":
-      return <SelectField {...field.props} />
-    case "ComplexSelectField":
-      return <ComplexSelectField {...field.props} />
-    case "TextAreaField":
-      return <TextAreaField {...field.props} />
-    case "Button":
-      return <Button {...field.props} />
     case "ResetButton":
       return <ResetButton {...field.props} />
+    case "SelectField":
+      return <SelectField {...field.props} />
     case "SubmitButton":
       return <SubmitButton {...field.props} />
     case "TelField":
       return <TelField {...field.props} />
+    case "TextAreaField":
+      return <TextAreaField {...field.props} />
     case "TextField":
     default:
       return <TextField {...field.props} />
