@@ -1,11 +1,12 @@
-import React from "react"
+import { Meta } from "@storybook/react"
 import { Close } from "@amsterdam/asc-assets"
 import ResetButton from "./ResetButton"
 import TextField from "../TextField/TextField"
 
 export default {
-  title: "Button/Reset button"
-}
+  title: "Button/Reset button",
+  component: TextField
+} as Meta
 
 export const WithIcon = () => (
   <>

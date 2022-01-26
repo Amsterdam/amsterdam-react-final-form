@@ -1,13 +1,40 @@
-import React from "react"
+import { ComponentProps } from "react"
+import { Story, Meta } from "@storybook/react"
 import TextAreaField from "./TextAreaField"
 
 export default {
-  title: "TextArea"
+  title: "TextArea",
+  component: TextAreaField
+} as Meta
+
+const StoryComponent: Story<ComponentProps<typeof TextAreaField>> = (args) => <TextAreaField {...args} />
+
+export const WithLabel = StoryComponent.bind({})
+WithLabel.args = {
+  name: "myFieldName",
+  label: "foo"
 }
 
-export const WithLabel = () => <TextAreaField name='myFieldName' label='foo' />
-export const WithHint = () => <TextAreaField name='myFieldName' label='foo' hint='Nullam quis risus eget urna mollis ornare vel eu leo.' />
-export const WithoutLabel = () => <TextAreaField name='myFieldName' />
-export const WithError = () => <TextAreaField name='myFieldName' label='foo' validate={() => "some error occurred"} />
-export const WithRequired = () => <TextAreaField name='myFieldName' label='foo' isRequired={true} />
+export const WithHint = StoryComponent.bind({})
+WithHint.args = {
+  ...WithLabel.args,
+  hint: "Nullam quis risus eget urna mollis ornare vel eu leo."
+}
 
+export const WithoutLabel = StoryComponent.bind({})
+WithoutLabel.args = {
+  ...WithLabel.args,
+  label: undefined
+}
+
+export const WithError = StoryComponent.bind({})
+WithError.args = {
+  ...WithLabel.args,
+  validate: () => "some error occurred"
+}
+
+export const WithRequired = StoryComponent.bind({})
+WithRequired.args = {
+  ...WithLabel.args,
+  required: true
+}

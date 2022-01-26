@@ -1,8 +1,16 @@
-import React from "react"
+import { ComponentProps } from "react"
+import { Story, Meta } from "@storybook/react"
 import Button from "./Button"
 
 export default {
-  title: "Button/Normal Button"
-}
+  title: "Button/Normal Button",
+  component: Button
+} as Meta
 
-export const Example = () => <Button label='foo' variant='primary' />
+const StoryComponent: Story<ComponentProps<typeof Button>> = (args) => <Button {...args} />
+
+export const Example = StoryComponent.bind({})
+Example.args = {
+  variant: "primary",
+  label: "foo"
+}

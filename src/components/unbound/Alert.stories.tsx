@@ -1,28 +1,40 @@
-import React from "react"
+import { ComponentProps } from "react"
+import { Story, Meta } from "@storybook/react"
 
 import Alert from "./Alert"
 
 export default {
-  title: "Unbound/Alert"
-}
+  title: "Unbound/Alert",
+  component: Alert
+} as Meta
 
-export const ErrorExample = () =>
-  <Alert variant="error">
-    Donec sed odio dui.
-  </Alert>
 
-export const ErrorExampleWithTitle = () =>
-  <Alert variant="error" title="Vestibulum id ligula!">
+const StoryComponent: Story<ComponentProps<typeof Alert>> = (args) => (
+  <Alert {...args} >
     Cras justo odio, dapibus ac facilisis in, egestas eget quam.
   </Alert>
+)
 
-export const SuccessExample = () =>
-  <Alert variant="success">
-    Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-  </Alert>
+export const ErrorExample = StoryComponent.bind({})
+ErrorExample.args = {
+  variant: "error"
+}
 
-export const SuccessExampleWithTitle = () =>
-  <Alert variant="success" title='Lorem ipsum solor damet!'>
-    Etiam porta sem malesuada magna mollis euismod.
-  </Alert>
+export const ErrorExampleWithTitle = StoryComponent.bind({})
+ErrorExampleWithTitle.args = {
+  ...ErrorExample.args,
+  title: "Vestibulum id ligula!"
+}
 
+export const SuccessExample = StoryComponent.bind({})
+SuccessExample.args = {
+  ...ErrorExample.args,
+  variant: "success"
+}
+
+export const SuccessExampleWithTitle = StoryComponent.bind({})
+SuccessExampleWithTitle.args = {
+  ...ErrorExample.args,
+  variant: "success",
+  title: "Vestibulum id ligula!"
+}

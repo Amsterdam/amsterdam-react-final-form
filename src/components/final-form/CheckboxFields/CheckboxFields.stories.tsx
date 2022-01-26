@@ -1,53 +1,53 @@
-import React from "react"
+import { ComponentProps } from "react"
+import { Story, Meta } from "@storybook/react"
 import CheckboxFields from "./CheckboxFields"
 
 export default {
-  title: "CheckboxFields"
+  title: "CheckboxFields",
+  component: CheckboxFields
+} as Meta
+
+const StoryComponent: Story<ComponentProps<typeof CheckboxFields>> = (args) => <CheckboxFields {...args} />
+
+export const WithLabel = StoryComponent.bind({})
+WithLabel.args = {
+  name: "myFieldName",
+  label: "foo",
+  options: { foo: "Foo", bar: "Bar" }
 }
 
-export const WithLabel = () => <CheckboxFields
-  name='myFieldName'
-  label='foo'
-  options={{ foo: "Foo", bar: "Bar" }}
-/>
-
-export const WithHint = () => <CheckboxFields
-  name='myFieldName'
-  label='foo'
-  hint='Nullam quis risus eget urna mollis ornare vel eu leo.'
-  options={{ foo: "Foo", bar: "Bar" }}
-/>
-
-export const WithoutLabel = () => <CheckboxFields
-  name='myFieldName'
-  options={{ foo: "Foo", bar: "Bar" }}
-/>
-
-export const WithError = () => <CheckboxFields
-  name='myFieldName'
-  options={{ foo: "Foo", bar: "Bar" }}
-  validate={() => "Some error occurred"}
-/>
-
-export const WithColumnCount = () => {
-  // Make 50 options:
-  const num = 50
-  const options = [...Array(num)]
-    .map((_, index) => `item ${ index }`)
-    .reduce(
-      (acc, item) => ({ ...acc, [item]: item }),
-      {}
-    )
-
-  return <CheckboxFields
-    name='myFieldName'
-    options={options}
-    columnCount={{ mobileS: 1, laptop: Math.ceil(num / 10) }}
-  />
+export const WithHint = StoryComponent.bind({})
+WithHint.args = {
+  ...WithLabel.args,
+  hint: "Nullam quis risus eget urna mollis ornare vel eu leo."
 }
 
-export const WithRequired = () => <CheckboxFields
-  name='myFieldName'
-  options={{ foo: "Foo", bar: "Bar" }}
-  isRequired={true}
-/>
+export const WithoutLabel = StoryComponent.bind({})
+WithoutLabel.args = {
+  ...WithLabel.args,
+  label: undefined
+}
+
+export const WithError = StoryComponent.bind({})
+WithError.args = {
+  ...WithLabel.args,
+  validate: () => "Some error occurred"
+}
+
+const num = 50
+const options = [...Array(num)]
+  .map((_, index) => `item ${ index }`)
+  .reduce((acc, item) => ({ ...acc, [item]: item }), {})
+
+export const WithColumnCount = StoryComponent.bind({})
+WithColumnCount.args = {
+  ...WithLabel.args,
+  options,
+  columnCount: { mobileS: 1, laptop: Math.ceil(num / 10) }
+}
+
+export const WithRequired = StoryComponent.bind({})
+WithRequired.args = {
+  ...WithLabel.args,
+  isRequired: true
+}

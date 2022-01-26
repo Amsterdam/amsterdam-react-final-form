@@ -1,12 +1,13 @@
-import React from "react"
+import { Meta } from "@storybook/react"
 import { Search, Close } from "@amsterdam/asc-assets"
 
 import Scaffold, { ScaffoldFields } from "./Scaffold"
 import ScaffoldField, { ScaffoldAvailableFields } from "./ScaffoldField"
 
 export default {
-  title: "Scaffold"
-}
+  title: "Scaffold",
+  component: Scaffold
+} as Meta
 
 const scaffoldArrayProps:ScaffoldAvailableFields = {
  type: "ArrayField",
@@ -123,27 +124,41 @@ export const SingleTextFieldExtraLabelRight = () => <ScaffoldField field={scaffo
 
 export const MultipleFields = () => <Scaffold fields={fields} />
 
-export const ComplexGrid = () => <Scaffold columns="1fr 3fr" fields={{
-  title: { type: "TextField", props: { label: "Title", name: "title", position: { column: 0, row: 0, columnSpan: 2 } } },
-  field1: { type: "TextField", props: { label: "Field 1", name: "field1", hint: "some hint", position: { column: 0, row: 1 } } },
-  field2: { type: "TextField", props: { label: "Field 2", extraLabel: "(extra element)", name: "field2", position: { column: 0, row: 2 } } },
-  field3: { type: "TextField", props: { label: "Field 3", name: "field3", position: { column: 0, row: 3 }, validate: () => "Some error" } },
-  textarea: { type: "TextAreaField", props: { label: "TextArea", name: "textarea", position: { column: 1, row: 1, rowSpan: 3 }, validate: () => "Some error" } },
-  field4: { type: "TextField", props: { label: "Field 4", name: "field4", position: { column: 0, row: 4, columnSpan: 2 } } },
-  submit: { type: "SubmitButton", props: { label: "Submit", position: { column: 0, row: 5 } } }
-}} />
+export const ComplexGrid = () => (
+  <Scaffold
+    columns="1fr 3fr"
+    fields={{
+      title: { type: "TextField", props: { label: "Title", name: "title", position: { column: 0, row: 0, columnSpan: 2 } } },
+      field1: { type: "TextField", props: { label: "Field 1", name: "field1", hint: "some hint", position: { column: 0, row: 1 } } },
+      field2: { type: "TextField", props: { label: "Field 2", extraLabel: "(extra element)", name: "field2", position: { column: 0, row: 2 } } },
+      field3: { type: "TextField", props: { label: "Field 3", name: "field3", position: { column: 0, row: 3 }, validate: () => "Some error" } },
+      textarea: { type: "TextAreaField", props: { label: "TextArea", name: "textarea", position: { column: 1, row: 1, rowSpan: 3 }, validate: () => "Some error" } },
+      field4: { type: "TextField", props: { label: "Field 4", name: "field4", position: { column: 0, row: 4, columnSpan: 2 } } },
+      submit: { type: "SubmitButton", props: { label: "Submit", position: { column: 0, row: 5 } } }
+    }}
+  />
+)
 
+export const ExampleUsingButtons = () => (
+  <Scaffold
+    columns="3fr 1fr 1fr auto auto"
+    fields={{
+      postcode: { type: "TextField", props: { label: "Postcode", name: "postal_code", validate: () => "error",  position: { column: 0, row: 0 } } },
+      houseNo: { type: "TextField", props: { label: "Huisnr.", name: "house_no", position: { column: 1, row: 0 } } },
+      extra: { type: "TextField", props: { label: "Hslt. / etage", name: "extra", position: { column: 2, row: 0 } } },
+      cancel: { type: "ResetButton", props: { align: "right", variant: "tertiary", type: "reset", alignedHorizontally: true, icon: <Close />, position: { column: 3, row: 0 } } },
+      submit: { type: "Button", props: { variant: "secondary", type: "submit", icon: <Search />, alignedHorizontally: true, position: { column: 4, row: 0 } } }
+    }}
+  />
+)
 
-export const ExampleUsingButtons = () => <Scaffold columns="3fr 1fr 1fr auto auto" fields={{
-  postcode: { type: "TextField", props: { label: "Postcode", name: "postal_code", validate: () => "error",  position: { column: 0, row: 0 } } },
-  houseNo: { type: "TextField", props: { label: "Huisnr.", name: "house_no", position: { column: 1, row: 0 } } },
-  extra: { type: "TextField", props: { label: "Hslt. / etage", name: "extra", position: { column: 2, row: 0 } } },
-  cancel: { type: "ResetButton", props: { align: "right", variant: "tertiary", type: "reset", alignedHorizontally: true, icon: <Close />, position: { column: 3, row: 0 } } },
-  submit: { type: "Button", props: { variant: "secondary", type: "submit", icon: <Search />, alignedHorizontally: true, position: { column: 4, row: 0 } } }
-}} />
-
-export const ExampleUsingComplexDataStructures = () => <Scaffold columns="1fr" fields={{
-  select: { type: "ComplexSelectField", props: { label: "select", name: "select", optionLabelField: "label", options: [ { label: "foo", value: "foo" }, { label: "bar", value: "bar" } ]} },
-  checkbox: { type: "ComplexCheckboxFields", props: { label: "checkbox", name: "checkbox", optionLabelField: "label", options: [ { label: "foo", value: "foo" }, { label: "bar", value: "bar" } ]} },
-  radio: { type: "ComplexRadioFields", props: { label: "radio", name: "radio", optionLabelField: "label", options: [ { label: "foo", value: "foo" }, { label: "bar", value: "bar" } ]} }
-}} />
+export const ExampleUsingComplexDataStructures = () => (
+  <Scaffold
+    columns="1fr"
+    fields={{
+      select: { type: "ComplexSelectField", props: { label: "select", name: "select", optionLabelField: "label", options: [ { label: "foo", value: "foo" }, { label: "bar", value: "bar" } ]} },
+      checkbox: { type: "ComplexCheckboxFields", props: { label: "checkbox", name: "checkbox", optionLabelField: "label", options: [ { label: "foo", value: "foo" }, { label: "bar", value: "bar" } ]} },
+      radio: { type: "ComplexRadioFields", props: { label: "radio", name: "radio", optionLabelField: "label", options: [ { label: "foo", value: "foo" }, { label: "bar", value: "bar" } ]} }
+    }}
+  />
+)

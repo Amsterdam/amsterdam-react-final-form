@@ -1,9 +1,11 @@
-import React from "react"
+import { ComponentProps } from "react"
+import { Story, Meta } from "@storybook/react"
 import DateField from "./DateField"
 
 export default {
-  title: "DateField"
-}
+  title: "DateField",
+  component: DateField
+} as Meta
 
 const today = () => {
   const date = new Date()
@@ -14,14 +16,59 @@ const today = () => {
   return `${ year }-${ month }-${ day }`
 }
 
-export const WithLabel = () => <DateField name='myFieldName' label='foo' />
-export const WithMinimumToday = () => <DateField name='myFieldName' label='foo' min={today()} />
-export const WithMaximumToday = () => <DateField name='myFieldName' label='foo' max={today()} />
-export const WithExtraLabel = () => <DateField name='myFieldName' label='foo' extraLabel={<strong>foo</strong>} />
-export const WithHint = () => <DateField name='myFieldName' label='foo' hint='Nullam quis risus eget urna mollis ornare vel eu leo.' />
-export const WithoutLabel = () => <DateField name='myFieldName' />
-export const WithError = () => <DateField name='myFieldName' label='foo' validate={() => "some error occurred"} />
-export const WithRequired = () => <DateField name='myFieldName' label='foo' isRequired={true} />
-export const WithDisabled = () => <DateField name='myFieldName' label='foo' disabled={true} />
+const StoryComponent: Story<ComponentProps<typeof DateField>> = (args) => <DateField {...args} />
 
+export const WithLabel = StoryComponent.bind({})
+WithLabel.args = {
+  name: "myFieldName",
+  label: "foo"
+}
 
+export const WithMinimumToday = StoryComponent.bind({})
+WithMinimumToday.args = {
+  ...WithLabel.args,
+  min: today()
+}
+
+export const WithMaximumToday = StoryComponent.bind({})
+WithMaximumToday.args = {
+  ...WithLabel.args,
+  max: today()
+}
+
+export const WithHint = StoryComponent.bind({})
+WithHint.args = {
+  ...WithLabel.args,
+  hint: "Nullam quis risus eget urna mollis ornare vel eu leo."
+}
+
+export const WithExtraLabel = StoryComponent.bind({})
+WithExtraLabel.args = {
+  ...WithLabel.args,
+  extraLabel: <strong>foo</strong>
+}
+
+export const WithoutLabel = StoryComponent.bind({})
+WithoutLabel.args = {
+  ...WithLabel.args,
+  label: undefined
+}
+
+export const WithError = StoryComponent.bind({})
+WithError.args = {
+  ...WithLabel.args,
+  validate: () => "some error occurred"
+}
+
+export const WithRequired = StoryComponent.bind({})
+WithRequired.args = {
+  ...WithLabel.args,
+  required: true
+}
+
+export const WithDisabled = StoryComponent.bind({})
+WithDisabled.args = {
+  ...WithLabel.args,
+  required: true,
+  disabled: true
+}
