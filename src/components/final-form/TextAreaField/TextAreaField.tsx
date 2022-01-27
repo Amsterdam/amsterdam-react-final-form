@@ -16,6 +16,7 @@ export type Props = {
   name: string
   validate?: FieldValidator<number>
   isRequired?: boolean
+  tooltip?: string
 } & React.TextareaHTMLAttributes<HTMLTextAreaElement>
 
 const TextField:React.FC<Props> = ({ name, label, validate, isRequired, ...otherProps }) => {
@@ -29,12 +30,14 @@ const TextField:React.FC<Props> = ({ name, label, validate, isRequired, ...other
     ])
   })
 
-  return <UnboundTextArea
-    label={label}
-    error={meta.touched && meta.error}
-    { ...input }
-    { ...otherProps }
-  />
+  return (
+    <UnboundTextArea
+      label={label}
+      error={meta.touched && meta.error}
+      { ...input }
+      { ...otherProps }
+    />
+  )
 }
 
 export default TextField

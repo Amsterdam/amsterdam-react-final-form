@@ -23,7 +23,11 @@ export type Props = {
 
 const defaultRenderEach:RenderEach = (props, renderer) => renderer(props)
 
-const ArrayField:React.FC<Props> = ({ label, columns, hint, position, align, name, scaffoldFields, renderEach, allowAdd = false, allowRemove, autoPosition = true, minItems = 0, maxItems = Number.MAX_VALUE }) => {
+const ArrayField:React.FC<Props> = ({
+  label, columns, hint, position, align, name, scaffoldFields, renderEach,
+  allowAdd = false, allowRemove, autoPosition = true, minItems = 0,
+  maxItems = Number.MAX_VALUE, tooltip
+}) => {
   const { mutators: { push } } = useForm()
   const { fields: { value } } = useFieldArray(name)
 
@@ -41,39 +45,41 @@ const ArrayField:React.FC<Props> = ({ label, columns, hint, position, align, nam
     }
   }, [minItems, name, push, value, allowAdd, maxItems])
 
-  return <ComposedField label={label} hint={hint} position={position} align={align}>
-    <FieldArray name={name}>
-      { ({ fields }) => fields.map((name, index) => (
-          <Scaffold
-            columns={columns}
-            key={name}
-            fields={prefixNames(name, autoPosition ? positionedFields : scaffoldFields)}
-            renderEach={renderEach ?? defaultRenderEach}
-          >
-            { allowRemove && (
-              <RowButtonWrap>
-                <StyledButton
-                  disabled={index < minItems}
-                  variant='tertiary'
-                  icon={<TrashBin />}
-                  onClick={(e:React.MouseEvent) => { e.preventDefault(); fields.remove(index) }}
-                />
-              </RowButtonWrap>
-            ) }
-          </Scaffold>
-      ))}
-    </FieldArray>
-    { allowAdd && (value?.length ?? 0) < maxItems && (
-      <AddButtonWrap>
-        <StyledButton
-          variant='tertiary'
-          icon={<Enlarge />}
-          onClick={(e:React.MouseEvent) => { e.preventDefault(); push(name, undefined) } }
-          id={`button-add-${ name }`}
-        />
-      </AddButtonWrap>
-    ) }
-  </ComposedField>
+  return (
+    <ComposedField label={label} hint={hint} position={position} align={align} tooltip={tooltip}>
+      <FieldArray name={name}>
+        { ({ fields }) => fields.map((name, index) => (
+            <Scaffold
+              columns={columns}
+              key={name}
+              fields={prefixNames(name, autoPosition ? positionedFields : scaffoldFields)}
+              renderEach={renderEach ?? defaultRenderEach}
+            >
+              { allowRemove && (
+                <RowButtonWrap>
+                  <StyledButton
+                    disabled={index < minItems}
+                    variant='tertiary'
+                    icon={<TrashBin />}
+                    onClick={(e:React.MouseEvent) => { e.preventDefault(); fields.remove(index) }}
+                  />
+                </RowButtonWrap>
+              ) }
+            </Scaffold>
+        ))}
+      </FieldArray>
+      { allowAdd && (value?.length ?? 0) < maxItems && (
+        <AddButtonWrap>
+          <StyledButton
+            variant='tertiary'
+            icon={<Enlarge />}
+            onClick={(e:React.MouseEvent) => { e.preventDefault(); push(name, undefined) } }
+            id={`button-add-${ name }`}
+          />
+        </AddButtonWrap>
+      ) }
+    </ComposedField>
+  )
 }
 
 export default ArrayField

@@ -17,6 +17,7 @@ export type Props = {
   validate?: FieldValidator<string>,
   options: Record<string, string>,
   isRequired?: boolean
+  tooltip?: string
 } & React.HTMLAttributes<HTMLSelectElement>
 
 /**
@@ -32,11 +33,13 @@ export const SelectField:React.FC<Props> = ({ name, validate, isRequired, ...res
     ])
   })
 
-  return (<UnboundSelectField
-    error={meta.touched && meta.error}
-    {...input}
-    {...restProps}
-  />)
+  return (
+    <UnboundSelectField
+      error={meta.touched && meta.error}
+      {...input}
+      {...restProps}
+    />
+  )
 }
 
 export default SelectField

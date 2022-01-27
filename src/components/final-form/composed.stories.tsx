@@ -22,6 +22,7 @@ export const Example = () => <>
   <TextField
     name='personal.surname'
     label='Surname'
+    tooltip="Text to explain certain things in a tooltip"
     validate={() => "This is an example error"}
   />
   <NumberField
@@ -37,11 +38,15 @@ export const Example = () => <>
     name='pizza.toppings'
     options={{ "tomato": "Tomato", "cheese": "Cheese", "ham": "Ham", "pineapple": "Pineapple" }}
     label='Toppings'
+    tooltip="Text to explain certain things in a tooltip"
+    hint="hint text"
+    extraLabel="extraLabel tekst"
   />
   <RadioFields
     name='pizza.delivery'
     options={{ "yes": "Yes", "no": "No" }}
     label='Delivery'
+    tooltip="Text to explain certain things in a tooltip"
     horizontal={true}
   />
   <RadioFields

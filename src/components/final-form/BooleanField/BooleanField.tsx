@@ -17,6 +17,7 @@ export type Props = {
   validate?: FieldValidator<boolean>
   isRequired?: boolean
   name: string
+  tooltip?: string
 } & Omit<React.HTMLAttributes<HTMLInputElement>, "onChange">
 
 const BooleanField:React.FC<Props> = ({ name, validate, isRequired, ...restProps }) => {
@@ -31,11 +32,13 @@ const BooleanField:React.FC<Props> = ({ name, validate, isRequired, ...restProps
     ])
   })
 
-  return (<UnboundBooleanField
-    error={meta.dirty && meta.error}
-    { ...input }
-    { ...restProps }
-  />)
+  return (
+    <UnboundBooleanField
+      error={meta.dirty && meta.error}
+      { ...input }
+      { ...restProps }
+    />
+  )
 }
 
 export default BooleanField
