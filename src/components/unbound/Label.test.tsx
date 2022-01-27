@@ -17,8 +17,10 @@ describe("Label", () => {
 
     it("should render a label and its children", () => {
       const label = component.find("StyledLabel")
+
       expect(label.exists()).toEqual(true)
-      expect(label.prop("label")).toEqual("myLabel")
+      expect(label.prop("position")).toEqual("top")
+      expect(label.prop("align")).toEqual("flex-start")
       expect(component.find("div").exists()).toEqual(true)
     })
   })

@@ -1,33 +1,26 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { useFormState } from "react-final-form"
 import { Spinner } from "@amsterdam/asc-ui"
+import isEmpty from "lodash.isempty"
 
 import UnboundButton, { Props as UnboundButtonProps } from "../../unbound/UnboundButton"
 
 const SubmitButton:React.FC<UnboundButtonProps> = ({ onClick, label, ...otherProps }) => {
-  const [disabled, setDisabled] = useState(true)
-  const { submitting, valid } = useFormState()
+  const { submitting, invalid, touched } = useFormState()
 
   /*
    ** In dynamic forms it takes some milliseconds to load all form items.
    ** Therefore the form can be valid for a little bit of time.
    ** This is causing a quick blink because of the disabled property.
-   ** To prevent this a timeout/delay of 150 ms is set to load aall form items.
+   ** To prevent this use isEmpty(touched) to check if there are form elements.
    */
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setDisabled(!valid)
-    }, 150)
-
-    return () => clearTimeout(timeoutId)
-  }, [valid])
 
   return (
     <UnboundButton
       type="submit"
       icon={ submitting ? <Spinner /> : undefined }
       variant="secondary"
-      disabled={ submitting || disabled }
+      disabled={ submitting || invalid || isEmpty(touched)}
       data-e2e-id="submit"
       { ...otherProps }
     >
