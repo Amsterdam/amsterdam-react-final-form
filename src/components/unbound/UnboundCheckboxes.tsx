@@ -16,15 +16,27 @@ export type Props = Omit<React.HTMLAttributes<HTMLInputElement>, "onChange"> & C
 type WrapperProps = Pick<Props, "columnCount">
 const Wrapper = styled.div<WrapperProps>`
   ${ (props:WrapperProps) => responsiveProps(props, {
-    "columnCount": (unit) => css`column-count: ${ unit };`  
-  }) } 
+    "columnCount": (unit) => css`column-count: ${ unit };`
+  }) }
 `
 
-export const UnboundCheckboxes:React.FC<Props> = ({ values: initialValues, label, extraLabel, extraLabelAlign, hint, align, columnCount, error, position, options, onChange, ...restProps }) => {
+export const UnboundCheckboxes:React.FC<Props> = ({
+  values: initialValues, label, extraLabel, extraLabelAlign, hint, align,
+  columnCount, error, position, options, onChange, tooltip, ...restProps
+}) => {
   const { values, handleChange } = useManageCheckboxes(initialValues, onChange)
 
   return (
-    <ComposedField label={label} extraLabel={extraLabel} extraLabelAlign={extraLabelAlign} hint={hint} error={error} position={position} align={align}>
+    <ComposedField
+      label={label}
+      extraLabel={extraLabel}
+      extraLabelAlign={extraLabelAlign}
+      hint={hint}
+      error={error}
+      position={position}
+      align={align}
+      tooltip={tooltip}
+    >
       <Wrapper columnCount={columnCount}>
         { Object
           .entries(options)

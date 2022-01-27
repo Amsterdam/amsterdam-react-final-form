@@ -11,9 +11,12 @@ export type ComposedFieldProps = {
   extraLabelAlign?: "left" | "right"
   hint?: string|JSX.Element
   error?: string
+  tooltip?: string
 } & Omit<FormGridCellProps, "rowOffset">
 
-const ComposedField:React.FC<ComposedFieldProps> = ({ children, id, label, extraLabel, extraLabelAlign, hint, error, position, align }) => (
+const ComposedField:React.FC<ComposedFieldProps> = ({
+  children, id, label, extraLabel, extraLabelAlign, hint, error, position, align, tooltip
+}) => (
   <>
     {/*
       We position labels and hints in the same cell.
@@ -21,7 +24,13 @@ const ComposedField:React.FC<ComposedFieldProps> = ({ children, id, label, extra
     */}
     { (hint || label) && (
       <FormGridCell position={position} align={align}>
-        <Label label={label} extraLabel={extraLabel} extraLabelAlign={extraLabelAlign} htmlFor={id} />
+        <Label
+          label={label}
+          extraLabel={extraLabel}
+          extraLabelAlign={extraLabelAlign}
+          htmlFor={id}
+          tooltip={tooltip}
+        />
         { hint && <Hint>{ hint }</Hint> }
       </FormGridCell>
     ) }

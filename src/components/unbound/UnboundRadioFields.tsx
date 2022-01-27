@@ -10,7 +10,10 @@ export type Props = Omit<React.HTMLAttributes<HTMLInputElement>, "onChange"> & C
   onChange?: (string:string) => void
 }
 
-const UnboundRadioFields:React.FC<Props> = ({ name, horizontal, label, extraLabel, extraLabelAlign, hint, error, position, align, options, value, onChange, ...restProps }) => {
+const UnboundRadioFields:React.FC<Props> = ({
+  name, horizontal, label, extraLabel, extraLabelAlign, hint, error, position,
+  align, options, value, onChange, tooltip, ...restProps
+}) => {
   const handleChange = useCallback((e) => {
     if (onChange) {
       onChange(e.target.value)
@@ -18,7 +21,16 @@ const UnboundRadioFields:React.FC<Props> = ({ name, horizontal, label, extraLabe
   }, [onChange])
 
   return (
-    <ComposedField label={label} extraLabel={extraLabel} extraLabelAlign={extraLabelAlign} hint={hint} error={error} position={position} align={align}>
+    <ComposedField
+      label={label}
+      extraLabel={extraLabel}
+      extraLabelAlign={extraLabelAlign}
+      hint={hint}
+      error={error}
+      position={position}
+      align={align}
+      tooltip={tooltip}
+    >
       <RadioGroup name={name} horizontal={horizontal}>
         { Object
           .entries(options)

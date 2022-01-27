@@ -9,8 +9,21 @@ export type Props = ComposedFieldProps & React.InputHTMLAttributes<HTMLInputElem
  * Renders a INPUT field that is not bound to final-form.
  */
 
-const UnboundDateField:React.FC<Props> = ({ label, extraLabel, extraLabelAlign, hint, error, position, align, ...otherProps }) =>
-  <ComposedField id={otherProps.id ?? otherProps.name} label={label} extraLabel={extraLabel} extraLabelAlign={extraLabelAlign} hint={hint} error={error} position={position} align={align}>
+const UnboundDateField:React.FC<Props> = ({
+    label, extraLabel, extraLabelAlign, hint, error, position,
+    align, tooltip, ...otherProps
+  }) =>
+  <ComposedField
+    id={otherProps.id ?? otherProps.name}
+    label={label}
+    extraLabel={extraLabel}
+    extraLabelAlign={extraLabelAlign}
+    hint={hint}
+    error={error}
+    position={position}
+    align={align}
+    tooltip={tooltip}
+  >
     <Input
       error={!!error}
       id={otherProps.id ?? otherProps.name}

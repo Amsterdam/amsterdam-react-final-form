@@ -24,6 +24,7 @@ const UnboundSelectField:React.FC<Props> = ({
   align,
   withEmptyOption,
   emptyOptionLabel,
+  tooltip,
   ...restProps
 }) => (
     <ComposedField
@@ -35,6 +36,7 @@ const UnboundSelectField:React.FC<Props> = ({
       error={error}
       position={position}
       align={align}
+      tooltip={tooltip}
     >
       <Select
         error={error}

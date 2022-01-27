@@ -4,9 +4,21 @@ import ComposedField, { ComposedFieldProps } from "./ComposedField"
 
 type Props = Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> & ComposedFieldProps
 
-const UnboundBooleanField:React.FC<Props> = ({ label, extraLabel, extraLabelAlign, hint, error, position, align, ...otherProps }) => (
+const UnboundBooleanField:React.FC<Props> = ({
+  label, extraLabel, extraLabelAlign, hint, error, position,
+  align, tooltip, ...otherProps
+}) => (
   <ComposedField
-    id={otherProps.id ?? otherProps.name} label={label} extraLabel={extraLabel} extraLabelAlign={extraLabelAlign} hint={hint} error={error} position={position} align={align}>
+    id={otherProps.id ?? otherProps.name}
+    label={label}
+    extraLabel={extraLabel}
+    extraLabelAlign={extraLabelAlign}
+    hint={hint}
+    error={error}
+    position={position}
+    align={align}
+    tooltip={tooltip}
+  >
     <Checkbox
       id={otherProps.id ?? otherProps.name}
       data-e2e-id={otherProps.id ?? otherProps.name}

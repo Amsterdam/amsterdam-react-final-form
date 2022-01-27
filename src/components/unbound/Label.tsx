@@ -1,12 +1,14 @@
+import React from "react"
 import { Label as AscLabel, themeSpacing } from "@amsterdam/asc-ui"
 import styled, { css } from "styled-components"
-import React from "react"
+import InfoTooltip from "../../utils/InfoTooltip"
 
 type Props = {
   label?: string
   extraLabel?: string | JSX.Element
   extraLabelAlign?: "left" | "right"
-  htmlFor?:string
+  htmlFor?: string
+  tooltip?: string
 }
 
 type WrapProps = {
@@ -17,10 +19,12 @@ const style = css`
   line-height: 18px;
   font-size: 18px;
   font-weight: 600;
-  width: 100%;  
-   
+  width: 100%;
+
   span {
-    margin: ${ themeSpacing(1) } 0;    
+    margin: ${ themeSpacing(1) } 0;
+    align-items: center;
+    display: flex;
   }
 `
 
@@ -43,32 +47,58 @@ const Right = styled.div`
 
 
 const StyledLabel = styled(AscLabel)`
-  ${ style }  
+  ${ style }
 `
 StyledLabel.displayName = "StyledLabel"
 
-export const Label:React.FC<Props> = ({ label, extraLabel, extraLabelAlign = "left", htmlFor, children }) =>
-  label !== undefined
-    ? extraLabel
+export const Label:React.FC<Props> = ({ label, extraLabel, extraLabelAlign = "left", htmlFor, children, tooltip  }) => {
+  if (label !== undefined) {
+    return (
+      extraLabel
         ? (
           <FlexWrap extraLabelAlign={ extraLabelAlign }>
             <Left>
-              <StyledLabel label={label} htmlFor={htmlFor} position='top' align='flex-start'>
+              <StyledLabel
+                label={
+                  <>
+                    {label}
+                    {tooltip && <InfoTooltip text={tooltip} />}
+                  </>
+                }
+                htmlFor={htmlFor}
+                position='top'
+                align='flex-start'
+              >
                 { children }
               </StyledLabel>
             </Left>
-            { extraLabelAlign === "right" ? 
-            <Right>
-              { extraLabel }
-            </Right> :
-            <Left>
-              { extraLabel }
-            </Left> }
+            { extraLabelAlign === "right" ? (
+              <Right>
+                { extraLabel }
+              </Right>
+            ) : (
+              <Left>
+                { extraLabel }
+              </Left>
+            )}
           </FlexWrap>
         )
         : (
-        <StyledLabel label={label} htmlFor={htmlFor} position='top' align='flex-start'>
+        <StyledLabel
+          label={
+            <>
+              {label}
+              {tooltip && <InfoTooltip text={tooltip} />}
+            </>
+          }
+          htmlFor={htmlFor}
+          position='top'
+          align='flex-start'
+        >
           { children }
         </StyledLabel>
       )
-    : <>{ children }</>
+    )
+  }
+  return <>{ children }</>
+}

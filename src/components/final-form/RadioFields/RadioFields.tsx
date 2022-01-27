@@ -18,6 +18,7 @@ export type Props = {
   horizontal?: boolean
   validate?: FieldValidator<string>
   isRequired?: boolean
+  tooltip?: string
 } & Omit<React.HTMLAttributes<HTMLInputElement>, "onChange">
 
 const RadioFields:React.FC<Props> = ({ name, isRequired, validate, ...restProps }) => {
@@ -31,11 +32,13 @@ const RadioFields:React.FC<Props> = ({ name, isRequired, validate, ...restProps 
     ])
   })
 
-  return (<UnboundRadioFields
-    error={meta.dirty && meta.error}
-    { ...input }
-    { ...restProps }
-  />)
+  return (
+    <UnboundRadioFields
+      error={meta.dirty && meta.error}
+      { ...input }
+      { ...restProps }
+    />
+  )
 }
 
 export default RadioFields

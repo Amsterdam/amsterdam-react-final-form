@@ -14,8 +14,20 @@ const StyledInput = styled(Input)`
   min-height: ${ props => props.type === "time" ? "40px" : "auto" };
 `
 
-const UnboundTextField:React.FC<Props> = ({ label, extraLabel, extraLabelAlign, hint, error, position, align, ...otherProps }) =>
-  <ComposedField id={otherProps.id ?? otherProps.name} label={label} extraLabel={extraLabel} extraLabelAlign={extraLabelAlign} hint={hint} error={error} position={position} align={align}>
+const UnboundTextField:React.FC<Props> = ({
+  label, extraLabel, extraLabelAlign, hint, error, position, align, tooltip, ...otherProps
+}) =>
+  <ComposedField
+    id={otherProps.id ?? otherProps.name}
+    label={label}
+    extraLabel={extraLabel}
+    extraLabelAlign={extraLabelAlign}
+    hint={hint}
+    error={error}
+    position={position}
+    align={align}
+    tooltip={tooltip}
+  >
     <StyledInput
       error={!!error}
       id={otherProps.id ?? otherProps.name}
