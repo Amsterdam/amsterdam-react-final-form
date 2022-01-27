@@ -1,3 +1,4 @@
+import React from "react"
 import styled from "styled-components"
 import { Icon, themeSpacing } from "@amsterdam/asc-ui"
 import { Info } from "@amsterdam/asc-assets"
@@ -20,7 +21,7 @@ const StyledTooltipText = styled.span`
   z-index: 100;
   white-space: normal;
   width: 250px;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.85);
   color: #fff;
   text-align: center;
   font-size: 14px;
