@@ -18,7 +18,14 @@ WithLabel.args = {
 export const WithHint = StoryComponent.bind({})
 WithHint.args = {
   ...WithLabel.args,
-  hint: "Nullam quis risus eget urna mollis ornare vel eu leo."
+  hint: "Nullam quis risus eget urna mollis ornare vel eu leo.",
+  checkboxLabel: "Specific checkbox label"
+}
+
+export const CheckboxLabel = StoryComponent.bind({})
+CheckboxLabel.args = {
+  ...WithLabel.args,
+  checkboxLabel: "Specific checkbox label"
 }
 
 export const WithError = StoryComponent.bind({})

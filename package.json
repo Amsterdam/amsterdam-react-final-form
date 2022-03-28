@@ -6,6 +6,7 @@
   "license": "MIT",
   "description": "Provides adapters for (form-)components defined in [amsterdam-styled-components](https://github.com/Amsterdam/amsterdam-styled-components/pull/491) to be compatible with [react-final-form](https://github.com/final-form/react-final-form).",
   "scripts": {
+    "start": "npm run storybook",
     "test": "react-scripts test --watchAll=false",
     "test:coverage": "react-scripts test --coverage --watchAll=false",
     "storybook": "start-storybook -p 9009 -s public",
