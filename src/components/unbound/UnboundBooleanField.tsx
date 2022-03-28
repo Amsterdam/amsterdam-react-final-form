@@ -1,4 +1,4 @@
-import { Checkbox } from "@amsterdam/asc-ui"
+import { Label as AscLabel, Checkbox } from "@amsterdam/asc-ui"
 import React from "react"
 import ComposedField, { ComposedFieldProps } from "./ComposedField"
 
@@ -6,7 +6,7 @@ type Props = Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> & Com
 
 const UnboundBooleanField:React.FC<Props> = ({
   label, extraLabel, extraLabelAlign, hint, error, position,
-  align, tooltip, ...otherProps
+  align, tooltip, checkboxLabel = "", ...otherProps
 }) => (
   <ComposedField
     id={otherProps.id ?? otherProps.name}
@@ -19,12 +19,14 @@ const UnboundBooleanField:React.FC<Props> = ({
     align={align}
     tooltip={tooltip}
   >
-    <Checkbox
-      id={otherProps.id ?? otherProps.name}
-      data-e2e-id={otherProps.id ?? otherProps.name}
-      error={!!error}
-      {...otherProps}
-    />
+    <AscLabel label={checkboxLabel}>
+      <Checkbox
+        id={otherProps.id ?? otherProps.name}
+        data-e2e-id={otherProps.id ?? otherProps.name}
+        error={!!error}
+        {...otherProps}
+      />
+    </AscLabel>
   </ComposedField>
 )
 

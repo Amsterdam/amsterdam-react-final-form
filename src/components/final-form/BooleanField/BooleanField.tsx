@@ -18,6 +18,7 @@ export type Props = {
   isRequired?: boolean
   name: string
   tooltip?: string
+  checkboxLabel?: string
 } & Omit<React.HTMLAttributes<HTMLInputElement>, "onChange">
 
 const BooleanField:React.FC<Props> = ({ name, validate, isRequired, ...restProps }) => {

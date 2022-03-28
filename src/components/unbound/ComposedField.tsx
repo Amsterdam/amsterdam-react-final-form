@@ -12,6 +12,7 @@ export type ComposedFieldProps = {
   hint?: string|JSX.Element
   error?: string
   tooltip?: string
+  checkboxLabel?: string
 } & Omit<FormGridCellProps, "rowOffset">
 
 const ComposedField:React.FC<ComposedFieldProps> = ({
@@ -39,7 +40,7 @@ const ComposedField:React.FC<ComposedFieldProps> = ({
       We position field and errors in the same cell.
       All fields in a row should be aligned neatly.
     */}
-    <FormGridCell position={position} align={align} rowOffset={1}>
+    <FormGridCell position={position} align="left" rowOffset={1}>
       { children }
       { error && <FieldError>{ error }</FieldError> }
     </FormGridCell>
