@@ -7,7 +7,6 @@ export type Props = ComposedFieldProps & React.TextareaHTMLAttributes<HTMLTextAr
 
 const StyledTextArea = styled(TextArea)`
   min-height: 100px;
-  flex: 1;
 `
 
 /**
