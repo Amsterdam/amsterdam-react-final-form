@@ -1,11 +1,11 @@
 # Amsterdam react final form
 
-Provides a way to generate a complete functional, but still customizable, amsterdam styled forms. 
+Provides a way to generate a complete functional, but still customizable, amsterdam styled forms.
 Based on OpenApi specs.
 
 ## Demo
 
-Please have a look at our storybook! 
+Please have a look at our storybook!
 - [Simple example](https://amsterdam.github.io/amsterdam-react-final-form/?path=/story/complete-form--example)
 - [Complex data structure example](https://amsterdam.github.io/amsterdam-react-final-form/?path=/story/complete-form--example-using-complex-fields)
 - [Responsive scaffolded grid](https://amsterdam.github.io/amsterdam-react-final-form/?path=/story/scaffold--complex-grid)
@@ -13,12 +13,12 @@ Please have a look at our storybook!
 ## Goals
 
 - Aims to be as close to the [design system](https://designsystem.amsterdam.nl/) as possible.
-- All fields should be able to render a: 
+- All fields should be able to render a:
     * Label
     * Input control (`input`, `select`, `textarea`, etc.)
-    * Error message 
+    * Error message
 - All fields should be as wide as their container.
-- All fields should be able to render using a JSON. (Which can be generated) 
+- All fields should be able to render using a JSON. (Which can be generated)
 - All fields should be fully unit-tested.
 - Form should be able to handle its state. No extra handling needed.
 
@@ -29,13 +29,13 @@ import React from 'react'
 import { ScaffoldForm, TextField, Button } from 'amsterdam-react-final-form'
 
 const MyForm:React.FC = () => {
-  const handleSubmit = useCallback((formValues) => console.log(formValues), [])  
+  const handleSubmit = useCallback((formValues) => console.log(formValues), [])
   return (
-     <ScaffoldForm onSubmit={handleSubmit}>                
+     <ScaffoldForm onSubmit={handleSubmit}>
          <TextField name='firstname' label='First name' />
          <TextField name='surname' label='Surname' />
          <Button variant='secondary' type='submit' />
-     <ScaffoldForm>        
+     <ScaffoldForm>
   )
 ```
 ![Image of simple form](./docs-assets/simple.png)
@@ -47,65 +47,65 @@ import React from 'react'
 import { ScaffoldForm, Scaffold, ScaffoldFields } from 'amsterdam-react-final-form'
 import { FormPositioner } from 'amsterdam-scaffold-form'
 
-// NOTE: You could generate these fields. 
+// NOTE: You could generate these fields.
 // For instance, based on an OpenAPI spec.
- 
+
 const scaffoldFields:ScaffoldFields = {
-  title: { 
-    type: "TextField", 
-    props: { label: "Title", name: "title" } 
+  title: {
+    type: "TextField",
+    props: { label: "Title", name: "title" }
   },
-  field1: { 
-    type: "TextField", 
-    props: { label: "Field 1", name: "field1", hint: "some hint" } 
+  field1: {
+    type: "TextField",
+    props: { label: "Field 1", name: "field1", hint: "some hint" }
   },
-  field2: { 
-    type: "TextField", 
-    props: { label: "Field 2", name: "field2" } 
+  field2: {
+    type: "TextField",
+    props: { label: "Field 2", name: "field2" }
   },
-  field3: { 
-    type: "TextField", 
-    props: { label: "Field 3", name: "field3" } 
+  field3: {
+    type: "TextField",
+    props: { label: "Field 3", name: "field3" }
   },
-  textarea: { 
-    type: "TextAreaField", 
-    props: { label: "TextArea", name: "textarea" } 
+  textarea: {
+    type: "TextAreaField",
+    props: { label: "TextArea", name: "textarea" }
   },
-  field4: { 
-    type: "TextField", 
-    props: { label: "Field 4", name: "field4" } 
+  field4: {
+    type: "TextField",
+    props: { label: "Field 4", name: "field4" }
   },
-  submit: { 
-    type: "SubmitButton", 
-    props: { label: "Submit" } 
+  submit: {
+    type: "SubmitButton",
+    props: { label: "Submit" }
   }
 }
 
 // NOTE: Field positioning is handled using purely css. Using breakpoints and css-grid.
-// We support all major browsers, including IE11. 
+// We support all major browsers, including IE11.
 
 const scaffoldProps = new FormPositioner(scaffoldFields)
-  
+
     .setVertical("mobileS")               // <- Render fields vertically in a single column for breakpoint "mobileS"
-    
-    .setGrid("laptop", "1fr 1fr", [       // <- Render fields in a grid with two equal columns for breakPoint "laptop". 
-        ["title", "title"],               // <- Title is stretched over two columns 
+
+    .setGrid("laptop", "1fr 1fr", [       // <- Render fields in a grid with two equal columns for breakPoint "laptop".
+        ["title", "title"],               // <- Title is stretched over two columns
         ["field1", "textarea"],           // <- TextArea is stretched over three rows
         ["field2", "textarea"],
         ["field3", "textarea"],
         ["field4", "field4"],             // <- Field4 is stretched over two columns
         ["submit"],
     ])
-  
+
     .getScaffoldProps()                   // Get props for scaffold field
 ;
 
 const MyForm:React.FC = () => {
-  const handleSubmit = useCallback((formValues) => console.log(formValues), [])  
+  const handleSubmit = useCallback((formValues) => console.log(formValues), [])
   return (
-     <ScaffoldForm onSubmit={handleSubmit}>                
+     <ScaffoldForm onSubmit={handleSubmit}>
          <Scaffold {...scaffoldProps} />
-     <ScaffoldForm>        
+     <ScaffoldForm>
   )
 }
 ```
@@ -118,13 +118,13 @@ import React from 'react'
 import { ScaffoldForm, Scaffold, ScaffoldFields } from 'amsterdam-react-final-form'
 import { FormPositioner } from 'amsterdam-scaffold-form'
 
-// NOTE: You could generate these fields. 
+// NOTE: You could generate these fields.
 // For instance, based on an OpenAPI spec.
- 
+
 const scaffoldFields:ScaffoldFields = {
-  title: { 
-    type: "TextField", 
-    props: { label: "Title", name: "title" } 
+  title: {
+    type: "TextField",
+    props: { label: "Title", name: "title" }
   },
   arrayField: {
     type: "ArrayField",
@@ -146,29 +146,29 @@ const scaffoldFields:ScaffoldFields = {
              type: "TextField",
              props: { name: "price", label: "Price" }
            }
-         }   
-    } 
-  },  
-  submit: { 
-    type: "SubmitButton", 
-    props: { label: "Submit" } 
+         }
+    }
+  },
+  submit: {
+    type: "SubmitButton",
+    props: { label: "Submit" }
   }
 }
 
 // NOTE: Field positioning is handled using purely css. Using breakpoints and css-grid.
-// We support all major browsers, including IE11. 
+// We support all major browsers, including IE11.
 
-const scaffoldProps = new FormPositioner(scaffoldFields)  
-    .setVertical("mobileS")               // <- Render fields vertically in a single column for breakpoint "mobileS"        
+const scaffoldProps = new FormPositioner(scaffoldFields)
+    .setVertical("mobileS")               // <- Render fields vertically in a single column for breakpoint "mobileS"
     .getScaffoldProps()                   // Get props for scaffold field
 ;
 
 const MyForm:React.FC = () => {
-  const handleSubmit = useCallback((formValues) => console.log(formValues), [])  
+  const handleSubmit = useCallback((formValues) => console.log(formValues), [])
   return (
-     <ScaffoldForm onSubmit={handleSubmit}>                
+     <ScaffoldForm onSubmit={handleSubmit}>
          <Scaffold {...scaffoldProps} />
-     <ScaffoldForm>        
+     <ScaffoldForm>
   )
 }
 ```
@@ -187,7 +187,7 @@ npm i amsterdam-react-final-form
 
 ## Pulish the package to npm
 
-Merge any changes into master and pull master to your local machine.
+Merge any changes into main and pull main to your local machine.
 In the root folder do:
 ```
 npm install
@@ -198,7 +198,7 @@ Then
 ```
 The package-versionnumber will automatically update.
 
-To use the latest package in your project, go to the root folder of your project and do 
+To use the latest package in your project, go to the root folder of your project and do
 ```
 npm install @amsterdam/amsterdam-react-final-form@latest
 ```
