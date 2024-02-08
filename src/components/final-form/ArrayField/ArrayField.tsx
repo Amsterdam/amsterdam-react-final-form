@@ -47,7 +47,7 @@ const ArrayField:React.FC<Props> = ({
 
   return (
     <ComposedField label={label} hint={hint} position={position} align={align} tooltip={tooltip}>
-      <FieldArray name={name}>
+      <FieldArray name={name} >
         { ({ fields }) => fields.map((name, index) => (
             <Scaffold
               columns={columns}
@@ -75,6 +75,7 @@ const ArrayField:React.FC<Props> = ({
             icon={<Enlarge />}
             onClick={(e:React.MouseEvent) => { e.preventDefault(); push(name, undefined) } }
             id={`button-add-${ name }`}
+            data-testid={`button-add-${ name }`}
           />
         </AddButtonWrap>
       ) }

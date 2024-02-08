@@ -1,46 +1,51 @@
-import React from "react"
-import { mount } from "enzyme"
-import { wrapInForm } from "../__test__/wrapInForm"
+import React from "react";
+import { render, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect";
+import { wrapInForm } from "../__test__/wrapInForm";
 
-import ResetButton from "./ResetButton"
-import TextField from "../TextField/TextField"
+import ResetButton from "./ResetButton";
+import TextField from "../TextField/TextField";
 
 describe("ResetButton", () => {
-  const onSubmit = jest.fn()
-  
-  const component = mount(wrapInForm(onSubmit, {},
-    <>
-      <TextField name="foo" />
-      <ResetButton />
-    </>
-  ))
-  
-  xit("should reset the form when clicked upon", () => {
-      component
-        .find("input")
-        .simulate("change", { target: { value: "Changed value" } })
+  const onSubmit = jest.fn();
 
-      expect(component.find("input").prop("value")).toEqual("Changed value")
-      component.find("button").simulate("click")
-      expect(component.find("input").prop("value")).toEqual("")
-  })
-  
-  describe("when given a onClick callback", () => {
-    const onClick = jest.fn()
-    const component = mount(wrapInForm(onSubmit, {},
-      <>
-        <TextField name="foo" />
-        <ResetButton onClick={onClick} />
-      </>
-    ))
+  it("should reset the form when clicked upon", () => {
+    const { getByTestId } = render(
+      wrapInForm(onSubmit, {},
+        <>
+          <TextField name="foo" />
+          <ResetButton />
+        </>
+      )
+    );
 
-    beforeEach(() => {
-      onClick.mockReset()
-    })
+    const input = getByTestId("foo");
+    const resetButton = getByTestId("reset");
+
+    fireEvent.change(input, { target: { value: "Changed value" } });
+    expect(input).toHaveValue("Changed value");
+
+    fireEvent.click(resetButton);
+    expect(input).toHaveValue("");
+  });
+
+  describe("when given an onClick callback", () => {
+    const onClick = jest.fn();
 
     it("should call the onClick handler", () => {
-      component.find("button").simulate("click")
-      expect(onClick).toHaveBeenCalled()
-    })
-  })
-})
+      const { getByTestId } = render(
+        wrapInForm(onSubmit, {},
+          <>
+            <TextField name="foo" />
+            <ResetButton onClick={onClick} />
+          </>
+        )
+      );
+
+      const resetButton = getByTestId("reset");
+
+      fireEvent.click(resetButton);
+      expect(onClick).toHaveBeenCalled();
+    });
+  });
+});

@@ -41,7 +41,7 @@ const UnboundSelectField:React.FC<Props> = ({
       <Select
         error={error}
         id={restProps.id ?? restProps.name}
-        data-e2e-id={restProps.id ?? restProps.name}
+        data-testid={restProps.id ?? restProps.name}
         {...restProps}
       >
         { withEmptyOption && <option>{ emptyOptionLabel ?? "-" }</option> }

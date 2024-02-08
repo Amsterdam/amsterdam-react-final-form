@@ -29,7 +29,7 @@ const UnboundTextArea:React.FC<Props> = ({
   >
     <StyledTextArea
       id={otherProps.id ?? otherProps.name}
-      data-e2e-id={otherProps.id ?? otherProps.name}
+      data-testid={otherProps.id ?? otherProps.name}
       error={!!error}
       {...otherProps}
     />

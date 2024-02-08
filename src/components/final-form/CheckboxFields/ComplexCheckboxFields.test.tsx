@@ -1,147 +1,147 @@
-import React from "react"
-import { mount } from "enzyme"
-import ComplexCheckboxFields from "./ComplexCheckboxFields"
-import { wrapInForm } from "../__test__/wrapInForm"
-import { FieldError } from "../../unbound/FieldError"
+import React from "react";
+import { render, fireEvent, screen } from "@testing-library/react";
+import ComplexCheckboxFields from "./ComplexCheckboxFields";
+import { wrapInForm } from "../__test__/wrapInForm";
+
 
 describe("ComplexCheckboxFields", () => {
-  const onSubmit = jest.fn()
-
-  const component = mount(wrapInForm(
-    onSubmit,
-    { myField: [
-      { "myLabelField": "bar", nested: { value: "bar" } },
-      { "myLabelField": "zoo", nested: { value: "zoo" } }
-    ]},
-    <ComplexCheckboxFields
-      name="myField"
-      optionLabelField="myLabelField"
-      options={[
-        { "myLabelField": "foo", nested: { value: "foo" } },
-        { "myLabelField": "zoo", nested: { value: "zoo" } },
-        { "myLabelField": "bar", nested: { value: "bar" } }
-      ]}
-    />
-  ))
+  const onSubmit = jest.fn();
 
   beforeEach(() => {
-    onSubmit.mockReset()
-  })
+    onSubmit.mockReset();
+  });
 
   it("should set an initial value", () => {
-    const input = component.find("input")
-    expect(input.at(0).prop("checked")).toEqual(false)
-    expect(input.at(1).prop("checked")).toEqual(true)
-    expect(input.at(2).prop("checked")).toEqual(true)
-  })
+    const { getByLabelText } = render(
+      wrapInForm(
+        onSubmit,
+        {
+          myField: [
+            { myLabelField: "bar", nested: { value: "bar" } },
+            { myLabelField: "zoo", nested: { value: "zoo" } }
+          ]
+        },
+        <ComplexCheckboxFields
+          name="myField"
+          optionLabelField="myLabelField"
+          options={[
+            { myLabelField: "foo", nested: { value: "foo" } },
+            { myLabelField: "zoo", nested: { value: "zoo" } },
+            { myLabelField: "bar", nested: { value: "bar" } }
+          ]}
+        />
+      )
+    );
 
-  it("should map the given `labelField` to its rendered labels", () => {
-    const labels = component.find("label")
-    expect(labels.at(0).text()).toEqual("foo")
-    expect(labels.at(1).text()).toEqual("zoo")
-    expect(labels.at(2).text()).toEqual("bar")
-  })
+    const fooCheckbox = getByLabelText("foo") as HTMLInputElement;
+    const zooCheckbox = getByLabelText("zoo") as HTMLInputElement;
+    const barCheckbox = getByLabelText("bar") as HTMLInputElement;
+
+    expect(fooCheckbox.checked).toBeFalsy();
+    expect(zooCheckbox.checked).toBeTruthy();
+    expect(barCheckbox.checked).toBeTruthy();
+
+  });
 
   it("should propagate its changes to the wrapping form", () => {
-    // Check 'foo'
-    component
-      .find("input")
-      .at(0)
-      .simulate("change", { target: { checked: true } })
-
-    // Uncheck 'zoo'
-    component
-      .find("input")
-      .at(1)
-      .simulate("change", { target: { checked: false } })
-
-    component
-      .find("form")
-      .simulate("submit")
-
-    expect(onSubmit)
-      .toHaveBeenCalledWith(
-        { "myField": [
-          { "myLabelField": "bar", nested: { value: "bar" } },
-          { "myLabelField": "foo", nested: { value: "foo" } }
-        ]},
-        expect.anything(),
-        expect.anything()
+    const { getByLabelText, getByTestId } = render(
+      wrapInForm(
+        onSubmit,
+        {
+          myField: [
+            { myLabelField: "bar", nested: { value: "bar" } },
+            { myLabelField: "zoo", nested: { value: "zoo" } }
+          ]
+        },
+        <ComplexCheckboxFields
+          name="myField"
+          optionLabelField="myLabelField"
+          options={[
+            { myLabelField: "foo", nested: { value: "foo" } },
+            { myLabelField: "zoo", nested: { value: "zoo" } },
+            { myLabelField: "bar", nested: { value: "bar" } }
+          ]}
+        />
       )
-  })
+    );
+
+    fireEvent.click(getByLabelText("foo"));
+    fireEvent.click(getByLabelText("zoo"));
+    fireEvent.submit(getByTestId("form-test-id"));
+
+    expect(onSubmit).toHaveBeenCalledWith(
+      {
+        myField: [
+          { myLabelField: "bar", nested: { value: "bar" } },
+          { myLabelField: "foo", nested: { value: "foo" } }
+        ]
+      },
+      expect.anything(),
+      expect.anything()
+    );
+  });
 
   describe("when a validation error is set", () => {
-    const component = mount(wrapInForm(
-      onSubmit,
-      { myField: [
-          { "myLabelField": "bar", nested: { value: "bar" } },
-          { "myLabelField": "zoo", nested: { value: "zoo" } }
-        ]},
-      <ComplexCheckboxFields
-        name="myField"
-        optionLabelField="myLabelField"
-        validate={() => "always errors"}
-        options={[
-          { "myLabelField": "foo", nested: { value: "foo" } },
-          { "myLabelField": "zoo", nested: { value: "zoo" } },
-          { "myLabelField": "bar", nested: { value: "bar" } }
-        ]}
-      />
-    ))
+    it("should show a FieldError when a user interacts with the component", () => {
+      const { getByLabelText  } = render(
+        wrapInForm(
+          onSubmit,
+          {
+            myField: [
+              { myLabelField: "bar", nested: { value: "bar" } },
+              { myLabelField: "zoo", nested: { value: "zoo" } }
+            ]
+          },
+          <ComplexCheckboxFields
+            name="myField"
+            optionLabelField="myLabelField"
+            validate={() => "always errors"}
+            options={[
+              { myLabelField: "foo", nested: { value: "foo" } },
+              { myLabelField: "zoo", nested: { value: "zoo" } },
+              { myLabelField: "bar", nested: { value: "bar" } }
+            ]}
+          />
+        )
+      );
 
-    it("should NOT show a FieldError", () => {
-      expect(component.find(FieldError).exists()).toEqual(false)
-    })
+      fireEvent.focus(getByLabelText("foo"));
+      fireEvent.click(getByLabelText("foo"));
+      fireEvent.blur(getByLabelText("foo"));
 
-    describe("when a user interacts with the component", () => {
-      beforeEach(() => {
-        component
-          .find("input")
-          .at(0)
-          .simulate("focus")
-          .simulate("change", { target: { checked: true } })
-          .simulate("blur")
-      })
-
-      it("should show a FieldError", () => {
-        expect(component.find(FieldError).text()).toEqual("always errors")
-      })
-    })
-  })
+      const text = screen.queryAllByText("always errors")
+      expect(text).toHaveLength(1)
+    });
+  });
 
   describe("when isRequired is set", () => {
-    const component = mount(wrapInForm(
-      onSubmit,
-      { myField: [{ "myLabelField": "foo", nested: { value: "foo" } }]},
-      <ComplexCheckboxFields
-        name="myField"
-        optionLabelField="myLabelField"
-        isRequired={true}
-        options={[
-          { "myLabelField": "foo", nested: { value: "foo" } },
-          { "myLabelField": "zoo", nested: { value: "zoo" } },
-          { "myLabelField": "bar", nested: { value: "bar" } }
-        ]}
-      />
-    ))
+    it("should show a FieldError when a user interacts with the component", () => {
+      const { getByLabelText } = render(
+        wrapInForm(
+          onSubmit,
+          {
+            myField: [{ myLabelField: "foo", nested: { value: "foo" } }]
+          },
+          <ComplexCheckboxFields
+            name="myField"
+            optionLabelField="myLabelField"
+            isRequired={true}
+            options={[
+              { myLabelField: "foo", nested: { value: "foo" } },
+              { myLabelField: "zoo", nested: { value: "zoo" } },
+              { myLabelField: "bar", nested: { value: "bar" } }
+            ]}
+          />
+        )
+      );
 
-    it("should NOT show a FieldError", () => {
-      expect(component.find(FieldError).exists()).toEqual(false)
-    })
+      fireEvent.focus(getByLabelText("foo"));
+      fireEvent.click(getByLabelText("foo"));
+      fireEvent.blur(getByLabelText("foo"));
 
-    describe("when a user interacts with the component", () => {
-      beforeEach(() => {
-        component
-          .find("input")
-          .at(0)
-          .simulate("focus")
-          .simulate("change", { target: { checked: false } })
-          .simulate("blur")
-      })
+      const text = screen.queryAllByText("Dit veld is verplicht")
+      expect(text).toHaveLength(1)
 
-      it("should show a FieldError", () => {
-        expect(component.find(FieldError).text()).toEqual("Dit veld is verplicht")
-      })
-    })
-  })
-})
+    });
+  });
+});

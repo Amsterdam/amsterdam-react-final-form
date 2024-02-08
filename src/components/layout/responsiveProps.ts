@@ -36,8 +36,8 @@ const breakPoints: BreakPoint[] = [
  */
 export const mq = (bk: BreakPoint, cssRules: any) => css`
   @media screen and ${ breakpoint("min-width", bk) } {
-    ${ cssRules }        
-  }        
+    ${ cssRules }
+  }
 `
 
 const isResponsiveObject = (obj:any): obj is Responsive<any> => {

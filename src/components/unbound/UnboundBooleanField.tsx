@@ -22,7 +22,7 @@ const UnboundBooleanField:React.FC<Props> = ({
     <AscLabel label={checkboxLabel}>
       <Checkbox
         id={otherProps.id ?? otherProps.name}
-        data-e2e-id={otherProps.id ?? otherProps.name}
+        data-testid={otherProps.id ?? otherProps.name}
         error={!!error}
         {...otherProps}
       />

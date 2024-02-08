@@ -22,7 +22,6 @@ const Overlay = styled.div`
   top: 0;
   right: 0;
   bottom: 0;
-  
   background-color: ${ themeColor("tint", "level1") };
   opacity: .8;
   z-index: 100;
@@ -58,7 +57,7 @@ function ScaffoldForm<T>({ onReset, onSubmit, onOriginalSubmit, children, showSp
       render={({ handleSubmit }) => (
         <Wrap>
           { showSpinner && (<Overlay><CenteredSpinner size={44} /></Overlay>) }
-          <form onSubmit={handleSubmit} onReset={onReset}>
+          <form onSubmit={handleSubmit} onReset={onReset} data-testid="form-test-id">
             { children }
           </form>
         </Wrap>

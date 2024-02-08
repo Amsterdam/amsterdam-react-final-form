@@ -11,6 +11,7 @@ export type Props = Omit<React.HTMLAttributes<HTMLInputElement>, "onChange"> & C
   options: Record<string, string>
   onChange?: (values:string[]) => void
   columnCount?: Responsive<number>
+  name?: string
 }
 
 type WrapperProps = Pick<Props, "columnCount">
@@ -49,6 +50,7 @@ export const UnboundCheckboxes:React.FC<Props> = ({
                   value={key}
                   checked={Array.isArray(values) && values.includes(key)}
                   error={!!error}
+                  data-testid={restProps.id ?? restProps.name}
                 />
               </AscLabel>
             </div>

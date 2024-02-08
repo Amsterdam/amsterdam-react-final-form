@@ -1,7 +1,5 @@
 module.exports = {
-  extends: [
-    "react-app"
-  ],
+  extends: ["react-app", "plugin:storybook/recommended"],
   rules: {
     "arrow-body-style": ["error", "as-needed"],
     "block-spacing": ["error", "always"],

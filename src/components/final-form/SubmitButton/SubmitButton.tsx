@@ -21,7 +21,7 @@ const SubmitButton:React.FC<UnboundButtonProps> = ({ onClick, label, ...otherPro
       icon={ submitting ? <Spinner /> : undefined }
       variant="secondary"
       disabled={ submitting || invalid || isEmpty(touched)}
-      data-e2e-id="submit"
+      data-testid="submit"
       { ...otherProps }
     >
       { label }

@@ -1,28 +1,30 @@
 import React from "react"
-import { mount } from "enzyme"
+import { render, screen } from "@testing-library/react"
 import ComposedField from "./ComposedField"
-import { Label } from "./Label"
-import { Hint } from "./Hint"
-import { FieldError } from "./FieldError"
+
 
 describe("ComposedField", () => {
   it("should render a label when given", () => {
-    const component = mount(<ComposedField label="Label" />)
-    expect(component.find(Label).exists()).toEqual(true)
+    render(<ComposedField label="Label" />)
+    const text = screen.queryAllByText("Label")
+    expect(text).toHaveLength(1)
   })
 
   it("should render a hint when given", () => {
-    const component = mount(<ComposedField hint="hint" />)
-    expect(component.find(Hint).exists()).toEqual(true)
+    render(<ComposedField hint="hint" />)
+    const text = screen.queryAllByText("hint")
+    expect(text).toHaveLength(1)
   })
 
   it("should render an error when given", () => {
-    const component = mount(<ComposedField error="error" />)
-    expect(component.find(FieldError).exists()).toEqual(true)
+    const { getByTestId } = render(<ComposedField error="error" />)
+    const text = screen.queryAllByText("error")
+    expect(text).toHaveLength(1)
   })
 
   it("should render children when given", () => {
-    const component = mount(<ComposedField><section>Foo</section></ComposedField>)
-    expect(component.find("section").text()).toEqual("Foo")
+    render(<ComposedField><section>Foo</section></ComposedField>)
+    const text = screen.queryAllByText("Foo")
+    expect(text).toHaveLength(1)
   })
 })

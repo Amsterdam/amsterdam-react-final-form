@@ -27,7 +27,7 @@ const UnboundDateField:React.FC<Props> = ({
     <Input
       error={!!error}
       id={otherProps.id ?? otherProps.name}
-      data-e2e-id={otherProps.id ?? otherProps.name}
+      data-testid={otherProps.id ?? otherProps.name}
       {...otherProps}
     />
   </ComposedField>

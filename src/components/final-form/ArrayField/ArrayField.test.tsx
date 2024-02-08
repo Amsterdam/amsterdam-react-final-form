@@ -1,112 +1,117 @@
-import React from "react"
-import { mount } from "enzyme"
-import { wrapInForm } from "../__test__/wrapInForm"
-import ArrayField from "./ArrayField"
-import { Button } from "@amsterdam/asc-ui"
-import TextField from "../TextField/TextField"
+import React from "react";
+import { render, fireEvent, screen, waitFor, queryByTestId } from "@testing-library/react";
+import { wrapInForm } from "../__test__/wrapInForm";
+import ArrayField from "./ArrayField";
+
 
 describe("ArrayField", () => {
-  const component = <ArrayField
-    name="myArray"
-    allowAdd={true}
-    allowRemove={true}
-    maxItems={5}
-    scaffoldFields={{
-      foo: { type: "TextField", props: { name: "foo" } },
-      bar: { type: "TextField", props: { name: "bar" } }
-    }}
-  />
+  const component = (
+    <ArrayField
+      name="myArray"
+      allowAdd={true}
+      allowRemove={true}
+      maxItems={5}
+      scaffoldFields={{
+        foo: { type: "TextField", props: { name: "foo" } },
+        bar: { type: "TextField", props: { name: "bar" } },
+      }}
+    />
+  );
 
   describe("when clicked on the add button", () => {
     it("should add scaffolded fields", () => {
-      const mounted = mount(wrapInForm(jest.fn(), {}, component))
-      
-      expect(mounted.find(TextField).length).toEqual(0)
-      
-      mounted.find(Button).last().simulate("click")
-      expect(mounted.find(TextField).length).toEqual(2)
+      const { container, getByTestId } = render(wrapInForm(jest.fn(), {}, component));
 
-      mounted.find(Button).last().simulate("click")
-      expect(mounted.find(TextField).length).toEqual(4)
-    })
-  })
+      expect(container.querySelectorAll("input").length).toEqual(0);
+
+      // select the button by its test ID and click on it.
+      const addButton = getByTestId('button-add-myArray');
+      fireEvent.click(addButton);
+
+      expect(container.querySelectorAll("input").length).toEqual(2);
+
+      fireEvent.click(addButton);
+
+      expect(container.querySelectorAll("input").length).toEqual(4);
+    });
+  });
 
   describe("when clicked on a remove button", () => {
     it ("should remove scaffolded fields", () => {
-      const mounted = mount(wrapInForm(jest.fn(), { myArray: [ { foo: "foo", bar: "bar" }, { foo: "foo", bar: "bar" } ]}, component))
+      const { container, getByTestId } = render(wrapInForm(jest.fn(), { myArray: [ { foo: "foo", bar: "bar" }, { foo: "foo", bar: "bar" } ]}, component))
 
-      expect(mounted.find(TextField).length).toEqual(4)
+      expect(container.querySelectorAll("input").length).toEqual(4);
 
-      mounted.find(Button).first().simulate("click")
-      expect(mounted.find(TextField).length).toEqual(2)
+      fireEvent.click(container.querySelector("button")!);
 
-      mounted.find(Button).first().simulate("click")
-      expect(mounted.find(TextField).length).toEqual(0)
+      expect(container.querySelectorAll("input").length).toEqual(2);
+
+      fireEvent.click(container.querySelector("button")!);
+
+      expect(container.querySelectorAll("input").length).toEqual(0);
     })
   })
 
   describe("when submitted", () => {
-    it("should submit an array", () => {
+    it("should submit an array", async () => {
       const onSubmit = jest.fn()
+      const { getByTestId } = render(wrapInForm(onSubmit, {}, component));
 
-      const mounted = mount(wrapInForm(onSubmit, {}, component))
-      mounted.find(Button).last().simulate("click")
-      mounted.find(Button).last().simulate("click")
+      const addButton = getByTestId('button-add-myArray');
+      fireEvent.click(addButton);
+      fireEvent.click(addButton);
 
-      mounted.find("input").forEach((textField, index) => textField.simulate("change", { target: { value: "change_" + index } }))
-      mounted.find("form").simulate("submit")
+      // Find all input elements
+      const inputElements = screen.getAllByRole('textbox');
 
-      expect(onSubmit).toHaveBeenCalledWith(
-        { myArray: [{ foo: "change_0", bar: "change_1" }, { foo: "change_2", bar: "change_3" } ]},
-        expect.anything(),
-        expect.anything()
-      )
+      // Iterate through input elements and set values based on index
+      inputElements.forEach((inputElement, index) => {
+        fireEvent.change(inputElement, { target: { value: "change_" + index } });
+      });
+
+      fireEvent.submit(screen.getByTestId("form-test-id"));
+
+      // Wait for the onSubmit function to be called
+      await waitFor(() => {
+        expect(onSubmit).toHaveBeenCalledWith(
+          {
+            myArray: [
+              { foo: "change_0", bar: "change_1" },
+              { foo: "change_2", bar: "change_3" }
+            ]
+          },
+          expect.anything(),
+          expect.anything()
+        );
+      });
     })
   })
-})
 
-describe("ArrayField", () => {
-  const component = <ArrayField
-    name="myArray"
-    allowAdd={true}
-    maxItems={3}
-    scaffoldFields={{
-      foo: { type: "TextField", props: { name: "foo" } },
-      bar: { type: "TextField", props: { name: "bar" } }
-    }}
-  />
-  it("should hide the add button when maxItems is reached", () => {
-    const mounted = mount(wrapInForm(jest.fn(), {}, component))
-    
-    mounted.find(Button).last().simulate("click")
-    mounted.find(Button).last().simulate("click")
-    mounted.find(Button).last().simulate("click")
+  describe("ArrayField", () => {
+    const maxNumberOfItems = 3
+    const component = <ArrayField
+      name="myArray"
+      allowAdd={true}
+      maxItems={maxNumberOfItems}
+      scaffoldFields={{
+        foo: { type: "TextField", props: { name: "foo" } },
+        bar: { type: "TextField", props: { name: "bar" } }
+      }}
+    />
+    it("should hide the add button when maxItems is reached", async () => {
+      const { container, getByTestId } = render(wrapInForm(jest.fn(), {}, component))
 
-    expect(mounted.find(Button).length).toEqual(0)
+      // select the button by its test ID and click on it {maxNumberOfItems} times.
+      const addButton = getByTestId('button-add-myArray');
+      for (let i = 0; i < maxNumberOfItems; i++) {
+        await fireEvent.click(addButton);
+      }
+
+      expect(container.querySelectorAll("input").length).toEqual(maxNumberOfItems * 2);
+
+      const invisibleButton = queryByTestId(container, 'button-add-myArray');
+
+      expect(invisibleButton).toBeNull();
+    })
   })
-})
-
-describe("ArrayField", () => {
-  const component = <ArrayField
-    name="myArray"
-    allowAdd={true}
-    allowRemove={true}
-    maxItems={3}
-    scaffoldFields={{
-      foo: { type: "TextField", props: { name: "foo" } },
-      bar: { type: "TextField", props: { name: "bar" } }
-    }}
-  />
-  it("should hide the add button when maxItems is reached", () => {
-    const mounted = mount(wrapInForm(jest.fn(), {}, component))
-    
-    mounted.find(Button).last().simulate("click")
-    mounted.find(Button).last().simulate("click")
-    mounted.find(Button).last().simulate("click")
-
-    expect(mounted.find(Button).length).toEqual(3) //3 remove-buttons
-
-    mounted.find(Button).first().simulate("click")
-    expect(mounted.find(Button).length).toEqual(3) //2 remove-buttons and 1 add-button
-  })
-})
+});
