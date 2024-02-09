@@ -31,7 +31,7 @@ const UnboundTextField:React.FC<Props> = ({
     <StyledInput
       error={!!error}
       id={otherProps.id ?? otherProps.name}
-      data-e2e-id={otherProps.id ?? otherProps.name}
+      data-testid={otherProps.id ?? otherProps.name}
       {...otherProps}
     />
   </ComposedField>

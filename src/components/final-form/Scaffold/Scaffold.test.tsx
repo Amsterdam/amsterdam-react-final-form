@@ -1,43 +1,49 @@
 import React from "react"
-import { mount } from "enzyme"
+import { render, screen } from "@testing-library/react"
+import "@testing-library/jest-dom/extend-expect"
 import { wrapInForm } from "../__test__/wrapInForm"
 import Scaffold from "./Scaffold"
-import TextField from "../TextField/TextField"
 
-const render = (component:JSX.Element, initialValues:any = {}) => mount(
-  wrapInForm(
-    jest.fn(),
-    initialValues,
-    component
-  )
-)
+const renderComponent = (component: JSX.Element, initialValues: any = {}) => {
+  const { rerender } = render(wrapInForm(jest.fn(), initialValues, component))
+  return { rerender }
+}
 
 describe("ScaffoldField", () => {
   it("should be able to render multiple fields", () => {
-    const component = render(<Scaffold fields={{
-      foo: { type: "TextField", props: { name: "foo" } },
-      bar: { type: "TextField", props: { name: "bar" } }
-    }} />)
+    renderComponent(
+      <Scaffold
+        fields={{
+          foo: { type: "TextField", props: { name: "foo" } },
+          bar: { type: "TextField", props: { name: "bar" } }
+        }}
+      />
+    )
 
-    const textFields = component.find(TextField)
-    expect(textFields.at(0).prop("name")).toEqual("foo")
-    expect(textFields.at(1).prop("name")).toEqual("bar")
+    const fooTextField = screen.getByTestId("foo")
+    const barTextField = screen.getByTestId("bar")
+
+    expect(fooTextField).toBeInTheDocument()
+    expect(barTextField).toBeInTheDocument()
   })
 
   it("should be able to modify its scaffolded fields", () => {
-    const renderEach = jest.fn((props, renderer) => <section>{ renderer(props) }</section>)
+    const renderEach = jest.fn((props, renderer) => <section data-testid="scaffold-section">{renderer(props)}</section>)
 
-    const component = render(<Scaffold
-      fields={{
-        foo: { type: "TextField", props: { name: "foo" } },
-        bar: { type: "TextField", props: { name: "bar" } }
-      }}
-      renderEach={renderEach}
-    />)
+    renderComponent(
+      <Scaffold
+        fields={{
+          foo: { type: "TextField", props: { name: "foo" } },
+          bar: { type: "TextField", props: { name: "bar" } }
+        }}
+        renderEach={renderEach}
+      />
+    )
 
-    // TextField should now been wrapped with a 'section':
-    const sections = component.find("section")
-    expect(sections.at(0).find("TextField").exists()).toEqual(true)
+    // TextField should now be wrapped with a 'section':
+    const sections = screen.getAllByTestId("scaffold-section")
+    expect(sections[0].querySelector("input")).toBeInTheDocument()
+    expect(sections[1].querySelector("input")).toBeInTheDocument()
 
     expect(renderEach).toHaveBeenCalledTimes(2)
     expect(renderEach).toHaveBeenNthCalledWith(1, { type: "TextField", props: { name: "foo" } }, expect.anything(), 0)

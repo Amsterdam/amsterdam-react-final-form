@@ -1,94 +1,102 @@
 import React from "react"
-import { mount } from "enzyme"
+import { render, fireEvent, waitFor, screen } from "@testing-library/react"
 import BooleanField from "./BooleanField"
 import { wrapInForm } from "../__test__/wrapInForm"
-import { FieldError } from "../../unbound/FieldError"
+
 
 describe("BooleanField", () => {
   const onSubmit = jest.fn()
-
-  const component = mount(wrapInForm(
-    onSubmit,
-    { myField: true },
-    <BooleanField name='myField'  />
-  ))
 
   beforeEach(() => {
     onSubmit.mockReset()
   })
 
   it("should set an initial value", () => {
-    expect(component.find("input").prop("checked")).toEqual(true)
+    const { getByRole } = render(
+      wrapInForm(onSubmit, { myField: true }, <BooleanField name="myField" />)
+    )
+    const checkbox = getByRole("checkbox") as HTMLInputElement
+    expect(checkbox.checked).toEqual(true)
   })
 
-  it("should propagate its changes to the wrapping form", () => {
-    const checkbox = component.find("input")
-
-    checkbox.simulate("change", { target: { value: false } })
-
-    component
-      .find("form")
-      .simulate("submit")
-
-    expect(onSubmit)
-      .toHaveBeenCalledWith(
-        { "myField": false },
+  it("should propagate its changes to the wrapping form", async () => {
+    const { getByRole, getByTestId } = render(
+      wrapInForm(onSubmit, { myField: true }, <BooleanField name="myField" />)
+    )
+    const checkbox = getByRole("checkbox") as HTMLInputElement
+    fireEvent.click(checkbox)
+    await waitFor(() => {
+      fireEvent.submit(getByTestId("form-test-id"))
+      expect(onSubmit).toHaveBeenCalledWith(
+        { myField: false },
         expect.anything(),
         expect.anything()
       )
+    })
   })
 
   describe("when a validation error is set", () => {
-    const component = mount(wrapInForm(
-      onSubmit,
-      { myField: true },
-      <BooleanField name='myField' validate={() => "always errors"} />
-    ))
-
+    const errorMessage = "always errors"
     it("should NOT show a FieldError", () => {
-      expect(component.find(FieldError).exists()).toEqual(false)
+      render(
+        wrapInForm(
+          onSubmit,
+          { myField: true },
+          <BooleanField name="myField" validate={() => errorMessage} />
+        )
+      )
+      const text = screen.queryByText(errorMessage)
+      expect(text).toBeNull()
     })
 
-    describe("when a user interacts with the component", () => {
-      beforeEach(() => {
-        component
-          .find("input")
-          .simulate("focus")
-          .simulate("change", { target: { checked: true } })
-          .simulate("blur")
-      })
+    it("should show a FieldError when a user interacts with the component", () => {
+      const { getByRole } = render(
+        wrapInForm(
+          onSubmit,
+          { myField: true },
+          <BooleanField name="myField" validate={() => errorMessage} />
+        )
+      )
+      const checkbox = getByRole("checkbox") as HTMLInputElement
+      fireEvent.focus(checkbox)
+      fireEvent.click(checkbox)
+      fireEvent.blur(checkbox)
 
-      it("should show a FieldError", () => {
-        expect(component.find(FieldError).text()).toEqual("always errors")
-      })
+      const text = screen.queryAllByText(errorMessage)
+      expect(text).toHaveLength(1)
     })
   })
 
   describe("when isRequired is set", () => {
-    const component = mount(wrapInForm(
-      onSubmit,
-      { myField: true },
-      <BooleanField name='myField' isRequired={true} />
-    ))
-
+    const fieldErrorMessage = "Dit veld is verplicht"
     it("should NOT show a FieldError", () => {
-      expect(component.find(FieldError).exists()).toEqual(false)
+      render(
+        wrapInForm(
+          onSubmit,
+          { myField: true },
+          <BooleanField name="myField" isRequired />
+        )
+      )
+      const text = screen.queryAllByText(fieldErrorMessage)
+      expect(text).toHaveLength(0)
     })
 
-    describe("when a user interacts with the component", () => {
-      beforeEach(() => {
-        component
-          .find("input")
-          .simulate("focus")
-          .simulate("change", { target: { checked: true } })
-          .simulate("blur")
-          .simulate("change", { target: { checked: false } })
-          .simulate("blur")
-      })
+    it("should show a FieldError when a user interacts with the component", () => {
+      const { getByTestId } = render(
+        wrapInForm(
+          onSubmit,
+          { myField: true },
+          <BooleanField name="myField" isRequired />
+        )
+      )
 
-      it("should show a FieldError", () => {
-        expect(component.find(FieldError).text()).toEqual("Dit veld is verplicht")
-      })
+      const checkbox = getByTestId("myField") as HTMLInputElement
+      fireEvent.focus(checkbox)
+      fireEvent.click(checkbox)
+      fireEvent.blur(checkbox)
+
+      const text = screen.queryAllByText(fieldErrorMessage)
+      expect(text).toHaveLength(1)
     })
   })
 })

@@ -1,5 +1,5 @@
 import React from "react"
-import { mount } from "enzyme"
+import { render, screen, fireEvent } from "@testing-library/react"
 import ScaffoldForm from "./ScaffoldForm"
 import Scaffold, { ScaffoldFields } from "./Scaffold"
 
@@ -17,19 +17,21 @@ describe("ScaffoldForm", () => {
       }
   }
 
-  const component = mount(
-    <ScaffoldForm onSubmit={onSubmit}>
-      <Scaffold fields={fields} />
-    </ScaffoldForm>
-  )
-
   beforeEach(() => {
     onSubmit.mockReset()
   })
 
   it("should submit values", () => {
-    component.find("input").simulate("change", { target: { value: "foo bar" } })
-    component.find("form").simulate("submit")
+    render(
+      <ScaffoldForm onSubmit={onSubmit}>
+        <Scaffold fields={fields} />
+      </ScaffoldForm>
+    )
+
+    const input = screen.getByLabelText("Label") as HTMLInputElement
+
+    fireEvent.change(input, { target: { value: "foo bar" } })
+    fireEvent.submit(screen.getByTestId("form-test-id"))
 
     expect(onSubmit).toHaveBeenCalledWith({ field: "foo bar" })
   })

@@ -1,92 +1,83 @@
 import React from "react"
-import { mount } from "enzyme"
+import { render, fireEvent, screen } from "@testing-library/react"
 import NumberField from "./NumberField"
 import { wrapInForm } from "../__test__/wrapInForm"
-import { FieldError } from "../../unbound/FieldError"
 
 describe("NumberField", () => {
   const onSubmit = jest.fn()
-
-  const component = mount(wrapInForm(
-    onSubmit,
-    { myField: "5" },
-    <NumberField name='myField' min='0' max='10' />
-  ))
 
   beforeEach(() => {
     onSubmit.mockReset()
   })
 
   it("should set an initial value", () => {
-    expect(component.find("input").prop("value")).toEqual("5")
+    const { getByTestId } = render(
+      wrapInForm(onSubmit, { myField: "5" }, <NumberField name="myField" min="0" max="10" />)
+    )
+
+    const element = getByTestId("myField") as HTMLInputElement
+    expect(element.value).toEqual("5")
   })
 
   it("should propagate its changes to the wrapping form", () => {
-    component
-      .find("input")
-      .simulate("change", { target: { value: "6" } })
+    const { getByTestId } = render(
+      wrapInForm(onSubmit, { myField: "5" }, <NumberField name="myField" min="0" max="10" />)
+    )
 
-    component
-      .find("form")
-      .simulate("submit")
+    const input = getByTestId("myField") as HTMLInputElement
+    fireEvent.change(input, { target: { value: "6" } })
 
-    expect(onSubmit)
-      .toHaveBeenCalledWith(
-        { "myField": 6 },
-        expect.anything(),
-        expect.anything()
-      )
+    fireEvent.submit(screen.getByTestId("form-test-id"))
+
+    expect(onSubmit).toHaveBeenCalledWith({ myField: 6 }, expect.anything(), expect.anything())
   })
 
   describe("when a validation error is set", () => {
-    const component = mount(wrapInForm(
-      onSubmit,
-      { myField: "5" },
-      <NumberField name='myField' validate={() => "always errors"} />
-    ))
-
     it("should NOT show a FieldError", () => {
-      expect(component.find(FieldError).exists()).toEqual(false)
+      const { queryByTestId } = render(
+        wrapInForm(onSubmit, { myField: "5" }, <NumberField name="myField" validate={() => "always errors"} />)
+      )
+      expect(queryByTestId("field-error")).toBeNull()
     })
 
-    describe("when a user interacts with the component", () => {
-      beforeEach(() => {
-        component
-          .find("input")
-          .simulate("focus")
-          .simulate("change", { target: { value: "Changed value" } })
-          .simulate("blur")
-      })
+    it("should show a FieldError when a user interacts with the component", () => {
+      const { getByTestId } = render(
+        wrapInForm(onSubmit, { myField: "5" }, <NumberField name="myField" validate={() => "always errors"} />)
+      )
 
-      it("should show a FieldError", () => {
-        expect(component.find(FieldError).text()).toEqual("always errors")
-      })
+      const input = getByTestId("myField")
+
+      fireEvent.focus(input)
+      fireEvent.change(input, { target: { value: "Changed value" } })
+      fireEvent.blur(input)
+
+      const text = screen.queryAllByText("always errors")
+      expect(text).toHaveLength(1)
     })
   })
 
-  describe("when a isRequired is set", () => {
-    const component = mount(wrapInForm(
-      onSubmit,
-      { myField: "5" },
-      <NumberField name='myField' isRequired={true} />
-    ))
-
+  describe("when isRequired is set", () => {
     it("should NOT show a FieldError", () => {
-      expect(component.find(FieldError).exists()).toEqual(false)
+      render(
+        wrapInForm(onSubmit, { myField: "5" }, <NumberField name="myField" isRequired />)
+      )
+      const text = screen.queryByText("always errors")
+      expect(text).toBeNull()
     })
 
-    describe("when a user interacts with the component", () => {
-      beforeEach(() => {
-        component
-          .find("input")
-          .simulate("focus")
-          .simulate("change", { target: { value: "" } })
-          .simulate("blur")
-      })
+    it("should show a FieldError when a user interacts with the component", () => {
+      const { getByTestId } = render(
+        wrapInForm(onSubmit, { myField: "5" }, <NumberField name="myField" isRequired />)
+      )
 
-      it("should show a FieldError", () => {
-        expect(component.find(FieldError).text()).toEqual("Dit veld is verplicht")
-      })
+      const input = getByTestId("myField")
+      fireEvent.focus(input)
+      fireEvent.change(input, { target: { value: "" } })
+      fireEvent.blur(input)
+
+      const text = screen.queryAllByText("Dit veld is verplicht")
+      expect(text).toHaveLength(1)
     })
   })
 })
+

@@ -1,104 +1,154 @@
 import React from "react"
-import { mount } from "enzyme"
+import { render, fireEvent, screen } from "@testing-library/react"
 import SelectField from "./SelectField"
 import { wrapInForm } from "../__test__/wrapInForm"
-import { FieldError } from "../../unbound/FieldError"
 
 describe("SelectField", () => {
   const onSubmit = jest.fn()
-
-  const component = mount(wrapInForm(
-    onSubmit,
-    { myField: "bar" },
-    <SelectField name='myField' options={{ "foo": "Foo", "bar": "Bar" }} />
-  ))
 
   beforeEach(() => {
     onSubmit.mockReset()
   })
 
   it("should set an initial value", () => {
-    expect(component.find("select").prop("value")).toEqual("bar")
+    const { getByTestId } = render(
+      wrapInForm(
+        onSubmit,
+        { myField: "bar" },
+        <SelectField
+          name="myField"
+          options={{ foo: "Foo", bar: "Bar" }}
+          data-testid="select-field"
+        />
+      )
+    )
+
+    const selectElement = getByTestId("select-field") as HTMLInputElement
+    expect(selectElement.value).toEqual("bar")
   })
 
   it("should propagate its changes to the wrapping form", () => {
-    component
-      .find("select option[value='foo']")
-      .simulate("change")
-
-    component
-      .find("form")
-      .simulate("submit")
-
-    expect(onSubmit)
-      .toHaveBeenCalledWith(
-        { "myField": "foo" },
-        expect.anything(),
-        expect.anything()
+    const { getByTestId } = render(
+      wrapInForm(
+        onSubmit,
+        { myField: "bar" },
+        <SelectField
+          name="myField"
+          options={{ foo: "Foo", bar: "Bar" }}
+          data-testid="select-field"
+        />
       )
+    )
+
+    const selectElement = getByTestId("select-field") as HTMLInputElement
+
+    fireEvent.change(selectElement, {
+      target: { value: "foo" }
+    })
+    fireEvent.submit(getByTestId("form-test-id"))
+
+    expect(onSubmit).toHaveBeenCalledWith(
+      { myField: "foo" },
+      expect.anything(),
+      expect.anything()
+    )
   })
 
   describe("when a validation error is set", () => {
-    const component = mount(wrapInForm(
-      onSubmit,
-      { myField: "bar" },
-      <SelectField name='myField' options={{ "foo": "Foo", "bar": "Bar" }} validate={() => "always errors"} />
-    ))
-
     it("should NOT show a FieldError", () => {
-      expect(component.find(FieldError).exists()).toEqual(false)
+      const { getByTestId } = render(
+        wrapInForm(
+          onSubmit,
+          { myField: "bar" },
+          <SelectField
+            name="myField"
+            options={{ foo: "Foo", bar: "Bar" }}
+            validate={() => "always errors"}
+            data-testid="select-field"
+          />
+        )
+      )
+
+      fireEvent.focus(getByTestId("select-field"))
+      fireEvent.change(getByTestId("select-field"), {
+        target: { value: "foo" }
+      })
+
+      const text = screen.queryByText("always errors")
+      expect(text).toBeNull()
     })
 
-    describe("when a user interacts with the component", () => {
-      beforeEach(() => {
-        component
-          .find("select")
-          .simulate("focus")
+    it("should show a FieldError when a user interacts with the component", () => {
+      const { getByTestId } = render(
+        wrapInForm(
+          onSubmit,
+          { myField: "bar" },
+          <SelectField
+            name="myField"
+            options={{ foo: "Foo", bar: "Bar" }}
+            validate={() => "always errors"}
+            data-testid="select-field"
+          />
+        )
+      )
 
-        component
-          .find("select option[value='foo']")
-          .simulate("change")
-
-        component
-          .find("select")
-          .simulate("blur")
+      fireEvent.focus(getByTestId("select-field"))
+      fireEvent.change(getByTestId("select-field"), {
+        target: { value: "foo" }
       })
+      fireEvent.blur(getByTestId("select-field"))
 
-      it("should show a FieldError", () => {
-        expect(component.find(FieldError).text()).toEqual("always errors")
-      })
+      const text = screen.queryAllByText("always errors")
+      expect(text).toHaveLength(1)
     })
   })
 
   describe("when isRequired error is set", () => {
-    const component = mount(wrapInForm(
-      onSubmit,
-      { myField: "bar" },
-      <SelectField name='myField' options={{ "": "-", "foo": "Foo", "bar": "Bar" }} isRequired={true} />
-    ))
-
     it("should NOT show a FieldError", () => {
-      expect(component.find(FieldError).exists()).toEqual(false)
+      const { getByTestId } = render(
+        wrapInForm(
+          onSubmit,
+          { myField: "bar" },
+          <SelectField
+            name="myField"
+            options={{ "": "-", foo: "Foo", bar: "Bar" }}
+            isRequired={true}
+            data-testid="select-field"
+          />
+        )
+      )
+
+      fireEvent.focus(getByTestId("select-field"))
+      fireEvent.change(getByTestId("select-field"), {
+        target: { value: "" }
+      })
+
+      const text = screen.queryAllByText("Dit veld is verplicht")
+      expect(text).toHaveLength(0)
     })
 
-    describe("when a user interacts with the component", () => {
-      beforeEach(() => {
-        component
-          .find("select")
-          .simulate("focus")
+    it("should show a FieldError when a user interacts with the component", () => {
+      const { getByTestId } = render(
+        wrapInForm(
+          onSubmit,
+          { myField: "bar" },
+          <SelectField
+            name="myField"
+            options={{ "": "-", foo: "Foo", bar: "Bar" }}
+            isRequired={true}
+            data-testid="select-field"
+          />
+        )
+      )
 
-        component
-          .find("select option[value='']")
-          .simulate("change")
-
-        component
-          .find("select")
-          .simulate("blur")
+      fireEvent.focus(getByTestId("select-field"))
+      fireEvent.change(getByTestId("select-field"), {
+        target: { value: "" }
       })
+      fireEvent.blur(getByTestId("select-field"))
 
-      it("should show a FieldError", () => {
-        expect(component.find(FieldError).text()).toEqual("Dit veld is verplicht")
-      })
+      const text = screen.queryAllByText("Dit veld is verplicht")
+      expect(text).toHaveLength(1)
     })
   })
 })

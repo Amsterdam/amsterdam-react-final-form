@@ -1,65 +1,95 @@
 import React from "react"
-import { mount } from "enzyme"
+import { render, fireEvent, waitFor, screen } from "@testing-library/react"
 import RadioFields from "./RadioFields"
 import { wrapInForm } from "../__test__/wrapInForm"
-import { FieldError } from "../../unbound/FieldError"
 
 describe("RadioFields", () => {
   const onSubmit = jest.fn()
-
-  const component = mount(wrapInForm(
-    onSubmit,
-    { myField: "bar" },
-    <RadioFields name='myField' options={{ "foo": "Foo", "bar": "Bar" }} />
-  ))
 
   beforeEach(() => {
     onSubmit.mockReset()
   })
 
   it("should set an initial value", () => {
-    expect(component.find("input[checked=true]").prop("value")).toEqual("bar")
+    const { getByLabelText } = render(
+      wrapInForm(
+        onSubmit,
+        { myField: "bar" },
+        <RadioFields
+          name="myField"
+          options={{ foo: "Foo", bar: "Bar" }}
+        />
+      )
+    )
+
+    const checkedInput = getByLabelText("Bar") as HTMLInputElement
+    expect(checkedInput.checked).toEqual(true)
+    expect(checkedInput.value).toEqual("bar")
   })
 
-  it("should propagate its changes to the wrapping form", () => {
-    component
-      .find("input[value='foo']")
-      .simulate("change", { target: { value: "foo" } })
+  it("should propagate its changes to the wrapping form", async () => {
+    const { getByLabelText } = render(
+      wrapInForm(
+        onSubmit,
+        { myField: "bar" },
+        <RadioFields
+          name="myField"
+          options={{ foo: "Foo", bar: "Bar" }}
+        />
+      )
+    )
 
-    component
-      .find("form")
-      .simulate("submit")
+    fireEvent.click(getByLabelText("Foo"))
 
-    expect(onSubmit)
-      .toHaveBeenCalledWith(
-        { "myField": "foo" },
+    fireEvent.submit(screen.getByTestId("form-test-id"))
+
+    await waitFor(() => {
+      expect(onSubmit).toHaveBeenCalledWith(
+        { myField: "foo" },
         expect.anything(),
         expect.anything()
       )
+    })
   })
 
   describe("when a validation error is set", () => {
-    const component = mount(wrapInForm(
-      onSubmit,
-      { myField: "bar" },
-      <RadioFields name='myField' options={{ "foo": "Foo", "bar": "Bar" }} validate={() => "always errors"} />
-    ))
-
     it("should NOT show a FieldError", () => {
-      expect(component.find(FieldError).exists()).toEqual(false)
+      render(
+        wrapInForm(
+          onSubmit,
+          { myField: "bar" },
+          <RadioFields
+            name="myField"
+            options={{ foo: "Foo", bar: "Bar" }}
+            validate={() => "always errors"}
+          />
+        )
+      )
+
+      const text = screen.queryByText("always errors")
+      expect(text).toBeNull()
     })
 
-    describe("when a user interacts with the component", () => {
-      beforeEach(() => {
-        component
-          .find("input[value='foo']")
-          .simulate("focus")
-          .simulate("change", { target: { value: "foo" } })
-          .simulate("blur")
-      })
+    it("should show a FieldError after user interaction", async () => {
+      const { getByLabelText } = render(
+        wrapInForm(
+          onSubmit,
+          { myField: "bar" },
+          <RadioFields
+            name="myField"
+            options={{ foo: "Foo", bar: "Bar" }}
+            validate={() => "always errors"}
+          />
+        )
+      )
 
-      it("should show a FieldError", () => {
-        expect(component.find(FieldError).text()).toEqual("always errors")
+      fireEvent.focus(getByLabelText("Foo"))
+      fireEvent.click(getByLabelText("Foo"))
+      fireEvent.blur(getByLabelText("Foo"))
+
+      await waitFor(() => {
+        const text = screen.queryAllByText("always errors")
+        expect(text).toHaveLength(1)
       })
     })
   })

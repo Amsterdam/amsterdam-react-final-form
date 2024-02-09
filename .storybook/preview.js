@@ -1,8 +1,5 @@
-import "react-app-polyfill/ie11"
-import "react-app-polyfill/stable"
-
 import React, { useCallback } from 'react'
-import { addDecorator, configure } from '@storybook/react'
+import { configure } from '@storybook/react'
 import { GlobalStyle, ThemeProvider, themeColor } from '@amsterdam/asc-ui'
 import { action } from '@storybook/addon-actions'
 import { Form } from 'react-final-form'

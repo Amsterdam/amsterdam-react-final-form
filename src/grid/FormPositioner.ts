@@ -1,4 +1,4 @@
-import produce from "immer"
+import { produce } from "immer"
 import chunk from "lodash/chunk"
 
 import { Dimensions } from "../components/layout/FormGridCell"
@@ -48,7 +48,7 @@ export class FormPositioner<T extends OptionalPosition> {
     assertGridIsValid(Object.keys(this.fields), grid)
 
     // Update position attributes for the given fields:
-    const fields = produce(this.fields, draftState => {
+    const fields = produce(this.fields, (draftState: { [x: string]: { props: any } }) => {
       Object
         .keys(this.fields)
         .forEach(key => {

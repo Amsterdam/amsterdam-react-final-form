@@ -1,91 +1,90 @@
 import React from "react"
-import { mount } from "enzyme"
+import { render, fireEvent, waitFor } from "@testing-library/react"
 import DateField from "./DateField"
 import { wrapInForm } from "../__test__/wrapInForm"
-import { FieldError } from "../../unbound/FieldError"
+
+
+const initialValue = "2021-01-31"
 
 describe("DateField", () => {
   const onSubmit = jest.fn()
-
-  const component = mount(wrapInForm(
-    onSubmit,
-    { myField: "31/01/2021" },
-    <DateField name='myField' />
-  ))
 
   beforeEach(() => {
     onSubmit.mockReset()
   })
 
   it("should set an initial value", () => {
-    expect(component.find("input").prop("value")).toEqual("31/01/2021")
+    const initialValue = "2021-01-31" // Format the date string to match input type 'date'
+    const { getByDisplayValue } = render(
+      wrapInForm(onSubmit, { myField: initialValue }, <DateField name="myField" />)
+    )
+    expect(getByDisplayValue(initialValue)).toBeInTheDocument()
   })
 
-  it("should propagate its changes to the wrapping form", () => {
-    component
-      .find("input")
-      .simulate("change", { target: { value: "31/01/2022" } })
-
-    component
-      .find("form")
-      .simulate("submit")
-
-    expect(onSubmit)
-      .toHaveBeenCalledWith({
-        "myField": "31/01/2022" },
+  it("should propagate its changes to the wrapping form", async () => {
+    const { getByDisplayValue, getByTestId } = render(
+      wrapInForm(onSubmit, { myField: initialValue }, <DateField name="myField" />)
+    )
+    const input = getByDisplayValue(initialValue)
+    fireEvent.change(input, { target: { value: "2022-01-31" } })
+    fireEvent.submit(getByTestId("form-test-id"))
+    await waitFor(() => {
+      expect(onSubmit).toHaveBeenCalledWith(
+        { myField: "2022-01-31" },
         expect.anything(),
         expect.anything()
       )
+    })
   })
 
   describe("when a validation error is set", () => {
-    const component = mount(wrapInForm(
-      onSubmit,
-      { myField: "31/01/2021" },
-      <DateField name='myField' validate={() => "always errors"} />
-    ))
-
     it("should NOT show a FieldError", () => {
-      expect(component.find(FieldError).exists()).toEqual(false)
+      const { queryByTestId } = render(
+        wrapInForm(
+          onSubmit,
+          { myField: initialValue },
+          <DateField name="myField" validate={() => "always errors"} />
+        )
+      )
+      expect(queryByTestId("field-error")).toBeNull()
     })
 
-    describe("when a user interacts with the component", () => {
-      beforeEach(() => {
-        component
-          .find("input")
-          .simulate("focus")
-          .simulate("change", { target: { value: "31/01/2021" } })
-          .simulate("blur")
-      })
-
-      it("should show a FieldError", () => {
-        expect(component.find(FieldError).text()).toEqual("always errors")
+    it("should show a FieldError when a user interacts with the component", async () => {
+      const { getByTestId, getByDisplayValue } = render(
+        wrapInForm(
+          onSubmit,
+          { myField: initialValue },
+          <DateField name="myField" validate={() => "always errors"} />
+        )
+      )
+      const input = getByDisplayValue(initialValue)
+      fireEvent.focus(input)
+      fireEvent.change(input, { target: { value: "2022-01-31" } })
+      fireEvent.blur(input)
+      await waitFor(() => {
+        expect(getByTestId("form-test-id")).toHaveTextContent("always errors")
       })
     })
   })
 
   describe("when isRequired is set", () => {
-    const component = mount(wrapInForm(
-      onSubmit,
-      { myField: "31/01/2021" },
-      <DateField name='myField' isRequired={true} />
-    ))
-
     it("should NOT show a FieldError", () => {
-      expect(component.find(FieldError).exists()).toEqual(false)
+      const { queryByTestId } = render(
+        wrapInForm(onSubmit, { myField: initialValue }, <DateField name="myField" isRequired={true} />)
+      )
+      expect(queryByTestId("field-error")).toBeNull()
     })
 
-    describe("when a user interacts with the component", () => {
-      beforeEach(() => {
-        component
-          .find("input")
-          .simulate("focus")
-          .simulate("change", { target: { value: "" } })
-          .simulate("blur")
-      })
-
-      it("should show a FieldError", () => {
-        expect(component.find(FieldError).text()).toEqual("Dit veld is verplicht")
+    it("should show a FieldError when a user interacts with the component", async () => {
+      const { getByTestId, getByDisplayValue } = render(
+        wrapInForm(onSubmit, { myField: initialValue }, <DateField name="myField" isRequired={true} />)
+      )
+      const input = getByDisplayValue(initialValue)
+      fireEvent.focus(input)
+      fireEvent.change(input, { target: { value: "" } })
+      fireEvent.blur(input)
+      await waitFor(() => {
+        expect(getByTestId("form-test-id")).toHaveTextContent("Dit veld is verplicht")
       })
     })
   })

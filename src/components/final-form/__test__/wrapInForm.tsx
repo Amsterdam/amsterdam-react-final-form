@@ -14,7 +14,7 @@ export const wrapInForm = (
       mutators={ { ...arrayMutators } }
       initialValues={initialValues}
       render={({ handleSubmit }) => (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} data-testid="form-test-id">
           { components }
         </form>
       )}

@@ -1,27 +1,29 @@
 import React from "react"
-import { mount } from "enzyme"
+import { render } from "@testing-library/react"
 import { Label } from "./Label"
 
 describe("Label", () => {
   describe("when NOT given a label property", () => {
-    const component = mount(<Label><div>Foo</div></Label>)
+    const { getByTestId, queryByTestId } = render(
+      <Label><div data-testid="child">Foo</div></Label>
+    )
 
     it("should just render its children", () => {
-      expect(component.find("StyledLabel").exists()).toEqual(false)
-      expect(component.find("div").exists()).toEqual(true)
+      expect(queryByTestId("label")).toBeNull()
+      expect(getByTestId("child")).toBeInTheDocument()
     })
   })
 
   describe("when given a label property", () => {
-    const component = mount(<Label label='myLabel'><div>Foo</div></Label>)
-
     it("should render a label and its children", () => {
-      const label = component.find("StyledLabel")
+      const { getByText } = render(
+        <Label label='myLabel'><div data-testid="child">Foo</div></Label>
+      )
 
-      expect(label.exists()).toEqual(true)
-      expect(label.prop("position")).toEqual("top")
-      expect(label.prop("align")).toEqual("flex-start")
-      expect(component.find("div").exists()).toEqual(true)
+      const label = getByText("myLabel")
+
+      expect(label).toBeInTheDocument()
+      expect(getByText("Foo")).toBeInTheDocument()
     })
   })
 })

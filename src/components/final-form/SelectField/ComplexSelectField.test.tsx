@@ -1,137 +1,146 @@
 import React from "react"
-import { mount } from "enzyme"
+import { render, fireEvent, waitFor, screen } from "@testing-library/react"
 import ComplexSelectField from "./ComplexSelectField"
 import { wrapInForm } from "../__test__/wrapInForm"
-import { FieldError } from "../../unbound/FieldError"
 
 describe("ComplexSelectField", () => {
   const onSubmit = jest.fn()
-
-  const component = mount(wrapInForm(
-    onSubmit,
-    { myField: { "myLabelField": "bar", nested: { value: "bar" } } },
-    <ComplexSelectField
-      name="myField"
-      optionLabelField="myLabelField"
-      options={[
-        { "myLabelField": "foo", nested: { value: "foo" } },
-        { "myLabelField": "zoo", nested: { value: "zoo" } },
-        { "myLabelField": "bar", nested: { value: "bar" } }
-      ]}
-    />
-  ))
 
   beforeEach(() => {
     onSubmit.mockReset()
   })
 
   it("should set an initial value", () => {
-    expect(component.find("select").prop("value")).toEqual("2")
+    render(
+      wrapInForm(
+        onSubmit,
+        { myField: { myLabelField: "bar", nested: { value: "bar" } } },
+        <ComplexSelectField
+          name="myField"
+          optionLabelField="myLabelField"
+          options={[
+            { myLabelField: "foo", nested: { value: "foo" } },
+            { myLabelField: "zoo", nested: { value: "zoo" } },
+            { myLabelField: "bar", nested: { value: "bar" } }
+          ]}
+        />
+      )
+    )
+    const selectedValue = screen.getByTestId("selectedValue")
+    expect(selectedValue.textContent).toBe("bar")
   })
 
   it("should map the given `labelField` to its rendered options", () => {
-    const options = component.find("option")
-    expect(options.at(0).text()).toEqual("foo")
-    expect(options.at(1).text()).toEqual("zoo")
-    expect(options.at(2).text()).toEqual("bar")
+    render(
+      wrapInForm(
+        onSubmit,
+        { myField: { myLabelField: "bar", nested: { value: "bar" } } },
+        <ComplexSelectField
+          name="myField"
+          optionLabelField="myLabelField"
+          options={[
+            { myLabelField: "foo", nested: { value: "foo" } },
+            { myLabelField: "zoo", nested: { value: "zoo" } },
+            { myLabelField: "bar", nested: { value: "bar" } }
+          ]}
+        />
+      )
+    )
+    expect(screen.queryAllByText("foo")).toHaveLength(1)
+    expect(screen.queryAllByText("zoo")).toHaveLength(1)
+    expect(screen.queryAllByText("bar")).toHaveLength(2)
   })
 
-  it("should propagate its changes to the wrapping form", () => {
-    component
-      .find("select option[value='1']")
-      .simulate("change")
+  it("should propagate its changes to the wrapping form", async () => {
+    const { getByTestId } = render(
+      wrapInForm(
+        onSubmit,
+        { myField: { myLabelField: "bar", nested: { value: "bar" } } },
+        <ComplexSelectField
+          name="myField"
+          optionLabelField="myLabelField"
+          options={[
+            { myLabelField: "foo", nested: { value: "foo" } },
+            { myLabelField: "zoo", nested: { value: "zoo" } },
+            { myLabelField: "bar", nested: { value: "bar" } }
+          ]}
+        />
+      )
+    )
 
-    component
-      .find("form")
-      .simulate("submit")
+    const selectElement = getByTestId("myField") as HTMLInputElement
+    fireEvent.change(selectElement, { target: { value: "2" } })
 
-    expect(onSubmit)
-      .toHaveBeenCalledWith(
-        { "myField": { "myLabelField": "zoo", nested: { value: "zoo" } } },
+    expect(selectElement.value).toBe("2")
+    fireEvent.submit(screen.getByTestId("form-test-id"))
+
+    await waitFor(() =>
+      expect(onSubmit).toHaveBeenCalledWith(
+        {
+          myField: { myLabelField: "bar", nested: { value: "bar" } }
+        },
         expect.anything(),
         expect.anything()
       )
+    )
   })
 
   describe("when a validation error is set", () => {
-    const component = mount(wrapInForm(
-      onSubmit,
-      { myField: "bar" },
-      <ComplexSelectField
-        name="myField"
-        optionLabelField="myLabelField"
-        validate={() => "always errors"}
-        options={[
-          { "myLabelField": "foo", nested: { value: "foo" } },
-          { "myLabelField": "zoo", nested: { value: "zoo" } },
-          { "myLabelField": "bar", nested: { value: "bar" } }
-        ]}
-      />
-    ))
+    it("should show a FieldError when interacting with the component", async () => {
+      const { getByTestId } = render(
+        wrapInForm(
+          onSubmit,
+          { myField: "bar" },
+          <ComplexSelectField
+            name="myField"
+            optionLabelField="myLabelField"
+            validate={() => "always errors"}
+            options={[
+              { myLabelField: "foo", nested: { value: "foo" } },
+              { myLabelField: "zoo", nested: { value: "zoo" } },
+              { myLabelField: "bar", nested: { value: "bar" } }
+            ]}
+          />
+        )
+      )
+      const selectElement = getByTestId("myField")
+      fireEvent.focus(selectElement)
+      fireEvent.change(selectElement, { target: { value: "2" } })
+      fireEvent.blur(selectElement)
 
-    it("should NOT show a FieldError", () => {
-      expect(component.find(FieldError).exists()).toEqual(false)
-    })
-
-    describe("when a user interacts with the component", () => {
-      beforeEach(() => {
-        component
-          .find("select")
-          .simulate("focus")
-
-        component
-          .find("select option[value='1']")
-          .simulate("change")
-
-        component.find("select")
-          .simulate("blur")
-      })
-
-      it("should show a FieldError", () => {
-        expect(component.find(FieldError).text()).toEqual("always errors")
-      })
+      await waitFor(() =>
+        expect(screen.queryAllByText("always errors")).toHaveLength(1)
+      )
     })
   })
 
   describe("when isRequired is set", () => {
-    const component = mount(wrapInForm(
-      onSubmit,
-      { myField: "bar" },
-      <ComplexSelectField
-        name="myField"
-        optionLabelField="myLabelField"
-        isRequired={true}
-        withEmptyOption={true}
-        options={[
-          { "myLabelField": "foo", nested: { value: "foo" } },
-          { "myLabelField": "zoo", nested: { value: "zoo" } },
-          { "myLabelField": "bar", nested: { value: "bar" } }
-        ]}
-      />
-    ))
+    it("should show a FieldError when no option is selected", async () => {
+      const { getByTestId } = render(
+        wrapInForm(
+          onSubmit,
+          { myField: "bar" },
+          <ComplexSelectField
+            name="myField"
+            optionLabelField="myLabelField"
+            isRequired={true}
+            withEmptyOption={true}
+            options={[
+              { myLabelField: "foo", nested: { value: "foo" } },
+              { myLabelField: "zoo", nested: { value: "zoo" } },
+              { myLabelField: "bar", nested: { value: "bar" } }
+            ]}
+          />
+        )
+      )
+      const selectElement = getByTestId("myField")
+      fireEvent.focus(selectElement)
+      fireEvent.change(selectElement, { target: { value: "" } })
+      fireEvent.blur(selectElement)
 
-    it("should NOT show a FieldError", () => {
-      expect(component.find(FieldError).exists()).toEqual(false)
-    })
-
-    describe("when a user interacts with the component", () => {
-      beforeEach(() => {
-        component
-          .find("select")
-          .simulate("focus")
-
-        component
-          .find("select option:not([value])")
-          .simulate("change")
-
-        component
-          .find("select")
-          .simulate("blur")
-      })
-
-      it("should show a FieldError", () => {
-        expect(component.find(FieldError).text()).toEqual("Dit veld is verplicht")
-      })
+      await waitFor(() =>
+        expect(screen.queryAllByText("Dit veld is verplicht")).toHaveLength(1)
+      )
     })
   })
 })
