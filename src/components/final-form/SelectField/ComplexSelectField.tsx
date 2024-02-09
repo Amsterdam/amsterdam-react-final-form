@@ -18,7 +18,6 @@ export type Props<TYPE> = {
   validate?: FieldValidator<TYPE>,
   options: TYPE[]
   optionLabelField: keyof TYPE
-  optionKeyField?: keyof TYPE
   withEmptyOption?: boolean
   emptyOptionLabel?: string
   isRequired?: boolean
@@ -32,7 +31,6 @@ function ComplexSelectField<TYPE>({
   name,
   options,
   optionLabelField,
-  optionKeyField,
   validate,
   isRequired,
   ...restProps

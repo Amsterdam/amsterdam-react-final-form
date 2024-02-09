@@ -17,7 +17,7 @@ describe("ComposedField", () => {
   })
 
   it("should render an error when given", () => {
-    const { getByTestId } = render(<ComposedField error="error" />)
+    render(<ComposedField error="error" />)
     const text = screen.queryAllByText("error")
     expect(text).toHaveLength(1)
   })

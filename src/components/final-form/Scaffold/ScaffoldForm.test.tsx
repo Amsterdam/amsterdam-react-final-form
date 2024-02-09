@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent } from "@testing-library/react"
 import ScaffoldForm from "./ScaffoldForm"
 import Scaffold, { ScaffoldFields } from "./Scaffold"
 
@@ -26,13 +26,13 @@ describe("ScaffoldForm", () => {
       <ScaffoldForm onSubmit={onSubmit}>
         <Scaffold fields={fields} />
       </ScaffoldForm>
-    );
+    )
 
-    const input = screen.getByLabelText("Label") as HTMLInputElement;
+    const input = screen.getByLabelText("Label") as HTMLInputElement
 
-    fireEvent.change(input, { target: { value: "foo bar" } });
-    fireEvent.submit(screen.getByTestId("form-test-id"));
+    fireEvent.change(input, { target: { value: "foo bar" } })
+    fireEvent.submit(screen.getByTestId("form-test-id"))
 
-    expect(onSubmit).toHaveBeenCalledWith({ field: "foo bar" });
+    expect(onSubmit).toHaveBeenCalledWith({ field: "foo bar" })
   })
 })

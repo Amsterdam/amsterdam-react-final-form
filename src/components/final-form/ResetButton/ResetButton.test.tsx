@@ -1,13 +1,13 @@
-import React from "react";
-import { render, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
-import { wrapInForm } from "../__test__/wrapInForm";
+import React from "react"
+import { render, fireEvent } from "@testing-library/react"
+import "@testing-library/jest-dom/extend-expect"
+import { wrapInForm } from "../__test__/wrapInForm"
 
-import ResetButton from "./ResetButton";
-import TextField from "../TextField/TextField";
+import ResetButton from "./ResetButton"
+import TextField from "../TextField/TextField"
 
 describe("ResetButton", () => {
-  const onSubmit = jest.fn();
+  const onSubmit = jest.fn()
 
   it("should reset the form when clicked upon", () => {
     const { getByTestId } = render(
@@ -17,20 +17,20 @@ describe("ResetButton", () => {
           <ResetButton />
         </>
       )
-    );
+    )
 
-    const input = getByTestId("foo");
-    const resetButton = getByTestId("reset");
+    const input = getByTestId("foo")
+    const resetButton = getByTestId("reset")
 
-    fireEvent.change(input, { target: { value: "Changed value" } });
-    expect(input).toHaveValue("Changed value");
+    fireEvent.change(input, { target: { value: "Changed value" } })
+    expect(input).toHaveValue("Changed value")
 
-    fireEvent.click(resetButton);
-    expect(input).toHaveValue("");
-  });
+    fireEvent.click(resetButton)
+    expect(input).toHaveValue("")
+  })
 
   describe("when given an onClick callback", () => {
-    const onClick = jest.fn();
+    const onClick = jest.fn()
 
     it("should call the onClick handler", () => {
       const { getByTestId } = render(
@@ -40,12 +40,12 @@ describe("ResetButton", () => {
             <ResetButton onClick={onClick} />
           </>
         )
-      );
+      )
 
-      const resetButton = getByTestId("reset");
+      const resetButton = getByTestId("reset")
 
-      fireEvent.click(resetButton);
-      expect(onClick).toHaveBeenCalled();
-    });
-  });
-});
+      fireEvent.click(resetButton)
+      expect(onClick).toHaveBeenCalled()
+    })
+  })
+})

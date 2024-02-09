@@ -5,7 +5,7 @@ import isEmpty from "lodash.isempty"
 
 import UnboundButton, { Props as UnboundButtonProps } from "../../unbound/UnboundButton"
 
-const SubmitButton:React.FC<UnboundButtonProps> = ({ onClick, label, ...otherProps }) => {
+const SubmitButton:React.FC<UnboundButtonProps> = ({ label, ...otherProps }) => {
   const { submitting, invalid, touched } = useFormState()
 
   /*

@@ -12,6 +12,7 @@ module.exports = {
     "space-unary-ops": ["error"],
     "space-infix-ops": ["error"],
     "semi": ["error", "never"],
-    "template-curly-spacing": ["error", "always"]
+    "template-curly-spacing": ["error", "always"],
+    "@typescript-eslint/no-unused-vars": ["error", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
   }
 }

@@ -1,5 +1,5 @@
 import { FormPositioner, FormPositionerFields } from "./FormPositioner"
-import { ScaffoldAvailableFields } from "../index";
+import { ScaffoldAvailableFields } from "../index"
 
 describe("FormPositioner", () => {
   const form:FormPositionerFields<ScaffoldAvailableFields> = {

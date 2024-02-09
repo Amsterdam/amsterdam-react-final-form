@@ -1,7 +1,7 @@
-import React from "react";
-import { render, fireEvent, screen, waitFor, queryByTestId } from "@testing-library/react";
-import { wrapInForm } from "../__test__/wrapInForm";
-import ArrayField from "./ArrayField";
+import React from "react"
+import { render, fireEvent, screen, waitFor, queryByTestId } from "@testing-library/react"
+import { wrapInForm } from "../__test__/wrapInForm"
+import ArrayField from "./ArrayField"
 
 
 describe("ArrayField", () => {
@@ -13,63 +13,63 @@ describe("ArrayField", () => {
       maxItems={5}
       scaffoldFields={{
         foo: { type: "TextField", props: { name: "foo" } },
-        bar: { type: "TextField", props: { name: "bar" } },
+        bar: { type: "TextField", props: { name: "bar" } }
       }}
     />
-  );
+  )
 
   describe("when clicked on the add button", () => {
     it("should add scaffolded fields", () => {
-      const { container, getByTestId } = render(wrapInForm(jest.fn(), {}, component));
+      const { container, getByTestId } = render(wrapInForm(jest.fn(), {}, component))
 
-      expect(container.querySelectorAll("input").length).toEqual(0);
+      expect(container.querySelectorAll("input").length).toEqual(0)
 
       // select the button by its test ID and click on it.
-      const addButton = getByTestId('button-add-myArray');
-      fireEvent.click(addButton);
+      const addButton = getByTestId("button-add-myArray")
+      fireEvent.click(addButton)
 
-      expect(container.querySelectorAll("input").length).toEqual(2);
+      expect(container.querySelectorAll("input").length).toEqual(2)
 
-      fireEvent.click(addButton);
+      fireEvent.click(addButton)
 
-      expect(container.querySelectorAll("input").length).toEqual(4);
-    });
-  });
+      expect(container.querySelectorAll("input").length).toEqual(4)
+    })
+  })
 
   describe("when clicked on a remove button", () => {
     it ("should remove scaffolded fields", () => {
-      const { container, getByTestId } = render(wrapInForm(jest.fn(), { myArray: [ { foo: "foo", bar: "bar" }, { foo: "foo", bar: "bar" } ]}, component))
+      const { container } = render(wrapInForm(jest.fn(), { myArray: [ { foo: "foo", bar: "bar" }, { foo: "foo", bar: "bar" } ]}, component))
 
-      expect(container.querySelectorAll("input").length).toEqual(4);
+      expect(container.querySelectorAll("input").length).toEqual(4)
 
-      fireEvent.click(container.querySelector("button")!);
+      fireEvent.click(container.querySelector("button")!)
 
-      expect(container.querySelectorAll("input").length).toEqual(2);
+      expect(container.querySelectorAll("input").length).toEqual(2)
 
-      fireEvent.click(container.querySelector("button")!);
+      fireEvent.click(container.querySelector("button")!)
 
-      expect(container.querySelectorAll("input").length).toEqual(0);
+      expect(container.querySelectorAll("input").length).toEqual(0)
     })
   })
 
   describe("when submitted", () => {
     it("should submit an array", async () => {
       const onSubmit = jest.fn()
-      const { getByTestId } = render(wrapInForm(onSubmit, {}, component));
+      const { getByTestId } = render(wrapInForm(onSubmit, {}, component))
 
-      const addButton = getByTestId('button-add-myArray');
-      fireEvent.click(addButton);
-      fireEvent.click(addButton);
+      const addButton = getByTestId("button-add-myArray")
+      fireEvent.click(addButton)
+      fireEvent.click(addButton)
 
       // Find all input elements
-      const inputElements = screen.getAllByRole('textbox');
+      const inputElements = screen.getAllByRole("textbox")
 
       // Iterate through input elements and set values based on index
       inputElements.forEach((inputElement, index) => {
-        fireEvent.change(inputElement, { target: { value: "change_" + index } });
-      });
+        fireEvent.change(inputElement, { target: { value: "change_" + index } })
+      })
 
-      fireEvent.submit(screen.getByTestId("form-test-id"));
+      fireEvent.submit(screen.getByTestId("form-test-id"))
 
       // Wait for the onSubmit function to be called
       await waitFor(() => {
@@ -82,8 +82,8 @@ describe("ArrayField", () => {
           },
           expect.anything(),
           expect.anything()
-        );
-      });
+        )
+      })
     })
   })
 
@@ -102,16 +102,16 @@ describe("ArrayField", () => {
       const { container, getByTestId } = render(wrapInForm(jest.fn(), {}, component))
 
       // select the button by its test ID and click on it {maxNumberOfItems} times.
-      const addButton = getByTestId('button-add-myArray');
+      const addButton = getByTestId("button-add-myArray")
       for (let i = 0; i < maxNumberOfItems; i++) {
-        await fireEvent.click(addButton);
+        await fireEvent.click(addButton)
       }
 
-      expect(container.querySelectorAll("input").length).toEqual(maxNumberOfItems * 2);
+      expect(container.querySelectorAll("input").length).toEqual(maxNumberOfItems * 2)
 
-      const invisibleButton = queryByTestId(container, 'button-add-myArray');
+      const invisibleButton = queryByTestId(container, "button-add-myArray")
 
-      expect(invisibleButton).toBeNull();
+      expect(invisibleButton).toBeNull()
     })
   })
-});
+})

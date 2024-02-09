@@ -1,15 +1,15 @@
-import React from "react";
-import { render, fireEvent, screen } from "@testing-library/react";
-import ComplexCheckboxFields from "./ComplexCheckboxFields";
-import { wrapInForm } from "../__test__/wrapInForm";
+import React from "react"
+import { render, fireEvent, screen } from "@testing-library/react"
+import ComplexCheckboxFields from "./ComplexCheckboxFields"
+import { wrapInForm } from "../__test__/wrapInForm"
 
 
 describe("ComplexCheckboxFields", () => {
-  const onSubmit = jest.fn();
+  const onSubmit = jest.fn()
 
   beforeEach(() => {
-    onSubmit.mockReset();
-  });
+    onSubmit.mockReset()
+  })
 
   it("should set an initial value", () => {
     const { getByLabelText } = render(
@@ -31,17 +31,16 @@ describe("ComplexCheckboxFields", () => {
           ]}
         />
       )
-    );
+    )
 
-    const fooCheckbox = getByLabelText("foo") as HTMLInputElement;
-    const zooCheckbox = getByLabelText("zoo") as HTMLInputElement;
-    const barCheckbox = getByLabelText("bar") as HTMLInputElement;
+    const fooCheckbox = getByLabelText("foo") as HTMLInputElement
+    const zooCheckbox = getByLabelText("zoo") as HTMLInputElement
+    const barCheckbox = getByLabelText("bar") as HTMLInputElement
 
-    expect(fooCheckbox.checked).toBeFalsy();
-    expect(zooCheckbox.checked).toBeTruthy();
-    expect(barCheckbox.checked).toBeTruthy();
-
-  });
+    expect(fooCheckbox.checked).toBeFalsy()
+    expect(zooCheckbox.checked).toBeTruthy()
+    expect(barCheckbox.checked).toBeTruthy()
+  })
 
   it("should propagate its changes to the wrapping form", () => {
     const { getByLabelText, getByTestId } = render(
@@ -63,11 +62,11 @@ describe("ComplexCheckboxFields", () => {
           ]}
         />
       )
-    );
+    )
 
-    fireEvent.click(getByLabelText("foo"));
-    fireEvent.click(getByLabelText("zoo"));
-    fireEvent.submit(getByTestId("form-test-id"));
+    fireEvent.click(getByLabelText("foo"))
+    fireEvent.click(getByLabelText("zoo"))
+    fireEvent.submit(getByTestId("form-test-id"))
 
     expect(onSubmit).toHaveBeenCalledWith(
       {
@@ -78,8 +77,8 @@ describe("ComplexCheckboxFields", () => {
       },
       expect.anything(),
       expect.anything()
-    );
-  });
+    )
+  })
 
   describe("when a validation error is set", () => {
     it("should show a FieldError when a user interacts with the component", () => {
@@ -103,16 +102,16 @@ describe("ComplexCheckboxFields", () => {
             ]}
           />
         )
-      );
+      )
 
-      fireEvent.focus(getByLabelText("foo"));
-      fireEvent.click(getByLabelText("foo"));
-      fireEvent.blur(getByLabelText("foo"));
+      fireEvent.focus(getByLabelText("foo"))
+      fireEvent.click(getByLabelText("foo"))
+      fireEvent.blur(getByLabelText("foo"))
 
       const text = screen.queryAllByText("always errors")
       expect(text).toHaveLength(1)
-    });
-  });
+    })
+  })
 
   describe("when isRequired is set", () => {
     it("should show a FieldError when a user interacts with the component", () => {
@@ -133,15 +132,14 @@ describe("ComplexCheckboxFields", () => {
             ]}
           />
         )
-      );
+      )
 
-      fireEvent.focus(getByLabelText("foo"));
-      fireEvent.click(getByLabelText("foo"));
-      fireEvent.blur(getByLabelText("foo"));
+      fireEvent.focus(getByLabelText("foo"))
+      fireEvent.click(getByLabelText("foo"))
+      fireEvent.blur(getByLabelText("foo"))
 
       const text = screen.queryAllByText("Dit veld is verplicht")
       expect(text).toHaveLength(1)
-
-    });
-  });
-});
+    })
+  })
+})
