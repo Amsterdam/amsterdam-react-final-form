@@ -4,6 +4,7 @@
   "private": false,
   "repository": "https://github.com/amsterdam/amsterdam-react-final-form.git",
   "license": "MIT",
+  "main": "index.js",
   "description": "Provides adapters for (form-)components defined in [amsterdam-styled-components](https://github.com/Amsterdam/amsterdam-styled-components/pull/491) to be compatible with [react-final-form](https://github.com/final-form/react-final-form).",
   "scripts": {
     "start": "npm run storybook",
@@ -14,34 +15,6 @@
     "lint": "eslint --cache --ext .ts,.tsx src",
     "lint:fix": "npm run lint -- --fix",
     "build": "rm -Rf ./dist && tsc ./src/index.ts --strict --esModuleInterop --declaration --skipLibCheck --jsx react --outDir dist && cp ./package.json ./dist/"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all",
-      "IE 11"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version",
-      "IE 11"
-    ]
-  },
-  "peerDependencies": {
-    "@amsterdam/asc-assets": ">= 0.37",
-    "@amsterdam/asc-ui": ">= 0.37",
-    "final-form": ">= 4",
-    "final-form-arrays": ">= 3",
-    "react": ">= 16",
-    "react-dom": ">= 16",
-    "react-final-form": ">= 6",
-    "react-final-form-arrays": ">= 3",
-    "styled-components": ">= 5"
   },
   "dependencies": {
     "@types/lodash.isempty": "^4.4.7",
@@ -60,7 +33,7 @@
     "@storybook/addon-essentials": "^7.6.12",
     "@storybook/react": "^7.6.12",
     "@storybook/react-webpack5": "^7.6.12",
-    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^29.2.3",
@@ -85,6 +58,34 @@
     "styled-components": "^5.1.0",
     "typescript": "^5.3.3"
   },
+  "peerDependencies": {
+    "@amsterdam/asc-assets": ">= 0.37",
+    "@amsterdam/asc-ui": ">= 0.37",
+    "final-form": ">= 4",
+    "final-form-arrays": ">= 3",
+    "react": ">= 16",
+    "react-dom": ">= 16",
+    "react-final-form": ">= 6",
+    "react-final-form-arrays": ">= 3",
+    "styled-components": ">= 5"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all",
+      "IE 11"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version",
+      "IE 11"
+    ]
+  },
   "jest": {
     "testEnvironment": "jsdom",
     "collectCoverageFrom": [
@@ -94,10 +95,9 @@
       "!src/**/index.{ts,tsx}"
     ],
     "setupFilesAfterEnv": [
-      "@testing-library/jest-dom/extend-expect"
+      "@testing-library/jest-dom"
     ]
   },
-  "main": "index.js",
   "publishConfig": {
     "access": "public"
   }
