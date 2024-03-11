@@ -69,9 +69,6 @@
     "react-final-form-arrays": ">= 3",
     "styled-components": ">= 5"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
