@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import { configure } from '@storybook/react'
 import { GlobalStyle, ThemeProvider, themeColor } from '@amsterdam/asc-ui'
 import { action } from '@storybook/addon-actions'
 import { Form } from 'react-final-form'
@@ -57,3 +56,4 @@ export const decorators = [
     )
   }
 ]
+export const tags = ['autodocs'];
