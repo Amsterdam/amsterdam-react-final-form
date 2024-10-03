@@ -4,7 +4,6 @@ import UnboundButton, { Props as UnboundButtonProps } from "../../unbound/Unboun
 
 const ResetButton:React.FC<UnboundButtonProps> = ({ onClick, label, ...otherProps }) => {
   const {
-    // @ts-ignore
     restart
   } = useForm()
 

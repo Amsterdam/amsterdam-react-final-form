@@ -32,13 +32,14 @@ const EmailField:React.FC<Props> = ({ name, label, validate, isRequired, ...othe
     ])
   })
 
-  // @ts-ignore
-  return <UnboundTextField
-    label={label}
-    error={meta.touched && meta.error}
-    { ...input }
-    { ...otherProps }
-  />
+  return (
+    <UnboundTextField
+      label={label}
+      error={meta.touched && meta.error}
+      { ...input }
+      { ...otherProps }
+    />
+  )
 }
 
 export default EmailField

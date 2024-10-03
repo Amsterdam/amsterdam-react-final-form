@@ -51,13 +51,15 @@ const NumberField:React.FC<Props> = ({ name, label, validate, isRequired, ...oth
     ])
   })
 
-  // @ts-ignore
-  return <StyledUnboundTextField
-    label={label}
-    error={meta.touched && meta.error}
-    { ...input }
-    { ...otherProps }
-  />
+
+  return (
+    <StyledUnboundTextField
+      label={label}
+      error={meta.touched && meta.error}
+      { ...input }
+      { ...otherProps }
+    />
+  )
 }
 
 export default NumberField
