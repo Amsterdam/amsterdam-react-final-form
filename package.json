@@ -18,7 +18,7 @@
     "build": "rm -Rf ./dist && tsc ./src/index.ts --strict --esModuleInterop --declaration --skipLibCheck --jsx react --outDir dist && cp ./package.json ./dist/"
   },
   "dependencies": {
-    "@storybook/react-vite": "^8.3.4",
+    "@storybook/react-vite": "^9.0.12",
     "@types/lodash.isempty": "^4.4.7",
     "immer": "^10.0.3",
     "lodash.chunk": "^4.2.0",
