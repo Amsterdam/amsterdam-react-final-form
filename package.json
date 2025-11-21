@@ -13,7 +13,7 @@
     "test:coverage": "jest --coverage --watchAll=false",
     "storybook": "storybook dev -p 9009 public",
     "storybook:build": "storybook build -s public -o docs",
-    "lint": "eslint --cache --ext .ts,.tsx src",
+    "lint": "eslint --cache src",
     "lint:fix": "npm run lint -- --fix",
     "build": "rm -Rf ./dist && tsc ./src/index.ts --strict --esModuleInterop --declaration --skipLibCheck --jsx react --outDir dist && cp ./package.json ./dist/"
   },
