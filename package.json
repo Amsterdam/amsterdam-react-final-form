@@ -13,7 +13,7 @@
     "test:coverage": "jest --coverage --watchAll=false",
     "storybook": "storybook dev -p 9009 public",
     "storybook:build": "storybook build -s public -o docs",
-    "lint": "eslint --cache --ext .ts,.tsx src",
+    "lint": "eslint --cache src",
     "lint:fix": "npm run lint -- --fix",
     "build": "rm -Rf ./dist && tsc ./src/index.ts --strict --esModuleInterop --declaration --skipLibCheck --jsx react --outDir dist && cp ./package.json ./dist/"
   },
@@ -41,7 +41,7 @@
     "@types/lodash": "^4.14.190",
     "@types/node": "^22.5.4",
     "@types/react": "^17.0.0",
-    "@types/react-dom": "^18.0.3",
+    "@types/react-dom": "^17.0.0",
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^8.8.0",
     "@typescript-eslint/parser": "^8.8.0",
